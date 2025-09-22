@@ -10,10 +10,14 @@
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col">
 
+  <!-- Navbar -->
   <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
     <div class="max-w-6xl mx-auto px-4">
       <div class="flex justify-between items-center py-4">
+        <!-- โลโก้ -->
         <a href="index.html" class="text-2xl font-bold text-blue-600">Golf Portfolio</a>
+
+        <!-- เมนู Desktop -->
         <div class="hidden md:flex items-center">
           <div class="flex items-center gap-8">
             <a href="index.html" class="text-blue-600 font-semibold">หน้าแรก</a>
@@ -24,21 +28,53 @@
           <div class="relative">
             <a href="index_en.html" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50">
               <span class="inline-block w-5 h-3.5 overflow-hidden rounded-sm">
-                  <svg viewBox="0 0 60 30" class="w-full h-full"><rect width="60" height="30" fill="#012169"/><path d="M0,0 60,30 M60,0 0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 60,30 M60,0 0,30" stroke="#C8102E" stroke-width="4" clip-path="url(#t)"/><clipPath id="t"><path d="M30,15 h30 v15 z v-30 z h-30 z h-30 v30 z v-30 z"/></clipPath><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></svg>
+                <!-- ธง UK -->
+                <svg viewBox="0 0 60 30" class="w-full h-full">
+                  <rect width="60" height="30" fill="#012169"/>
+                  <path d="M0,0 60,30 M60,0 0,30" stroke="#fff" stroke-width="6"/>
+                  <path d="M0,0 60,30 M60,0 0,30" stroke="#C8102E" stroke-width="4" clip-path="url(#t)"/>
+                  <clipPath id="t">
+                    <path d="M30,15 h30 v15 z v-30 z h-30 z h-30 v30 z v-30 z"/>
+                  </clipPath>
+                  <path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/>
+                  <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/>
+                </svg>
               </span>
               <span class="text-sm font-medium">EN</span>
             </a>
           </div>
         </div>
+
+        <!-- ปุ่ม Hamburger -->
         <div class="md:hidden">
-          <a href="index_en.html" class="inline-flex items-center gap-2 px-2 py-1.5 rounded-lg border border-gray-200">
-            <span class="text-sm font-medium">EN</span>
-          </a>
+          <button id="menuBtn" class="p-2 text-gray-600 focus:outline-none">
+            <i class="fas fa-bars text-2xl"></i>
+          </button>
         </div>
       </div>
     </div>
   </nav>
 
+  <!-- Overlay -->
+  <div id="overlay" class="hidden fixed inset-0 bg-black/50 z-40"></div>
+
+  <!-- เมนูมือถือแบบ Slide-in -->
+  <div id="mobileMenu" class="fixed top-0 right-0 h-full w-64 bg-white shadow-lg transform translate-x-full transition-transform duration-300 z-50">
+    <div class="flex justify-between items-center p-4 border-b">
+      <h2 class="text-lg font-bold text-gray-700">เมนู</h2>
+      <button id="closeBtn" class="text-gray-600 text-2xl">&times;</button>
+    </div>
+    <div class="flex flex-col items-start px-6 py-4 space-y-4">
+      <a href="index.html" class="text-gray-700 hover:text-blue-600">หน้าแรก</a>
+      <a href="portfolio.html" class="text-gray-700 hover:text-blue-600">ผลงาน</a>
+      <a href="about.html" class="text-gray-700 hover:text-blue-600">เกี่ยวกับ</a>
+      <a href="index_en.html" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-200">
+        <span class="text-sm font-medium">EN</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
   <main class="flex-grow">
     <section class="bg-gradient-to-r from-blue-600 to-purple-600 text-white pt-24 pb-16">
       <div class="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
@@ -88,6 +124,8 @@
         </div>
       </div>
     </section>
+
+    <!-- Experience Section -->
     <section class="py-16 bg-white">
       <div class="max-w-6xl mx-auto px-4">
         <div class="text-center mb-12">
@@ -128,6 +166,7 @@
     </section>
   </main>
 
+  <!-- Footer -->
   <footer class="bg-gray-800 text-white py-8">
     <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
       <p>&copy; 2025 R.Rattanaubol . All rights reserved์</p>
@@ -137,6 +176,28 @@
       </div>
     </div>
   </footer>
+
+  <!-- Script สำหรับเมนูมือถือ -->
+  <script>
+    const menuBtn = document.getElementById("menuBtn");
+    const mobileMenu = document.getElementById("mobileMenu");
+    const overlay = document.getElementById("overlay");
+    const closeBtn = document.getElementById("closeBtn");
+
+    function openMenu() {
+      mobileMenu.classList.remove("translate-x-full");
+      overlay.classList.remove("hidden");
+    }
+
+    function closeMenu() {
+      mobileMenu.classList.add("translate-x-full");
+      overlay.classList.add("hidden");
+    }
+
+    menuBtn.addEventListener("click", openMenu);
+    closeBtn.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
+  </script>
 
 </body>
 </html>
