@@ -1,209 +1,576 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>เกี่ยวกับ - รัชชานนท์ รัตนอุบล</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-  <link href="style.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ratchanon Rattanaubol | Cyber Portfolio</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Kanit', 'sans-serif'],
+                        cyber: ['Orbitron', 'sans-serif'],
+                    },
+                    colors: {
+                        cyber: {
+                            dark: '#050a15',
+                            cyan: '#00f3ff',
+                            blue: '#0066ff',
+                            purple: '#bc13fe',
+                        }
+                    },
+                    animation: {
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #050a15;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        /* Neon Glow Effects */
+        .text-glow {
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.8), 0 0 20px rgba(0, 243, 255, 0.4);
+        }
+        
+        .box-glow {
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2), inset 0 0 10px rgba(0, 243, 255, 0.1);
+        }
+        
+        .box-glow:hover {
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.5), inset 0 0 15px rgba(0, 243, 255, 0.2);
+            border-color: #00f3ff;
+        }
+
+        /* Cyberpunk Borders */
+        .cyber-card {
+            position: relative;
+            background: rgba(5, 10, 21, 0.7);
+            border: 1px solid rgba(0, 102, 255, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .cyber-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 10px;
+            height: 10px;
+            border-top: 2px solid #00f3ff;
+            border-left: 2px solid #00f3ff;
+        }
+        
+        .cyber-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 10px;
+            height: 10px;
+            border-bottom: 2px solid #00f3ff;
+            border-right: 2px solid #00f3ff;
+        }
+
+        /* Scanline Overlay */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.2) 50%,
+                rgba(0,0,0,0.2)
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.3;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050a15;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0066ff;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f3ff;
+        }
+
+        /* Custom Typing Cursor */
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 1s step-start infinite;
+            color: #00f3ff;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* Skill Tag */
+        .skill-tag {
+            background: linear-gradient(45deg, rgba(0, 102, 255, 0.1), rgba(0, 243, 255, 0.05));
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            transition: all 0.3s;
+        }
+        .skill-tag:hover {
+            background: rgba(0, 243, 255, 0.2);
+            border-color: #00f3ff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 243, 255, 0.3);
+        }
+    </style>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
+<body class="antialiased selection:bg-cyber-cyan selection:text-black">
 
-  <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
-    <div class="max-w-6xl mx-auto px-4">
-      <div class="flex justify-between items-center py-4">
-        <a href="index.html" class="text-2xl font-bold text-blue-600">Golf Portfolio</a>
-        <div class="hidden md:flex items-center">
-          <div class="flex items-center gap-8">
-            <a href="index.html" class="text-gray-700 hover:text-blue-600">หน้าแรก</a>
-            <a href="portfolio.html" class="text-gray-700 hover:text-blue-600">ผลงาน</a>
-            <a href="about.html" class="text-blue-600 font-semibold">เกี่ยวกับ</a>
-          </div>
-          <div class="h-6 w-px bg-gray-200 mx-6"></div>
-          <div class="relative">
-             <a href="about_en.html" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50">
-                <span class="inline-block w-5 h-3.5 overflow-hidden rounded-sm"><svg viewBox="0 0 60 30" class="w-full h-full"><rect width="60" height="30" fill="#012169"/><path d="M0,0 60,30 M60,0 0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 60,30 M60,0 0,30" stroke="#C8102E" stroke-width="4" clip-path="url(#t)"/><clipPath id="t"><path d="M30,15 h30 v15 z v-30 z h-30 z h-30 v30 z v-30 z"/></clipPath><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></svg></span>
-                <span class="text-sm font-medium">EN</span>
-             </a>
-          </div>
+    <!-- Scanline Effect -->
+    <div class="scanlines"></div>
+
+    <!-- Network Animation Canvas -->
+    <canvas id="network-canvas" class="fixed top-0 left-0 w-full h-full z-0 opacity-40 pointer-events-none"></canvas>
+
+    <!-- Main Content -->
+    <div class="relative z-10 max-w-5xl mx-auto px-4 py-12 md:py-20 flex flex-col gap-12">
+        
+        <!-- Header Section -->
+        <header class="text-center md:text-left flex flex-col md:flex-row items-center gap-8 cyber-card p-8 rounded-lg box-glow">
+            <div class="w-40 h-40 md:w-48 md:h-48 rounded-full border-4 border-cyber-cyan p-1 relative group overflow-hidden">
+                <div class="absolute inset-0 border-4 border-transparent border-t-cyber-blue rounded-full animate-spin" style="animation-duration: 3s;"></div>
+                <!-- อัปเดตลิงก์รูปโปรไฟล์จาก Google Drive (รูปแบบ Direct Link) -->
+                <img src="https://drive.google.com/uc?export=view&id=1Seh8r6B65jjntwxFQUw68TxoGTVBrtwS" alt="Ratchanon Rattanaubol" class="w-full h-full object-cover rounded-full filter grayscale contrast-125 group-hover:grayscale-0 transition duration-500">
+            </div>
+            
+            <div class="flex-1">
+                <h2 class="text-cyber-cyan font-cyber tracking-widest text-sm mb-2 uppercase">System_Initialized_</h2>
+                <h1 class="text-4xl md:text-5xl font-cyber font-bold text-white mb-2 text-glow">Ratchanon <br class="hidden md:block"> Rattanaubol</h1>
+                <h3 class="text-xl md:text-2xl text-gray-300 font-light mb-4">รัชชานนท์ รัตนอุบล</h3>
+                <p class="text-cyber-cyan font-cyber text-lg md:text-xl typing-cursor mb-6">IT SUPPORT ENGINEER</p>
+                
+                <div class="flex flex-wrap justify-center md:justify-start gap-4 text-sm font-sans">
+                    <a href="mailto:ratchanon93g@gmail.com" class="flex items-center gap-2 bg-black/50 border border-cyber-blue px-4 py-2 rounded hover:border-cyber-cyan hover:text-cyber-cyan transition">
+                        <i class="fa-solid fa-envelope text-cyber-cyan"></i> ratchanon93g@gmail.com
+                    </a>
+                    <a href="tel:0961891670" class="flex items-center gap-2 bg-black/50 border border-cyber-blue px-4 py-2 rounded hover:border-cyber-cyan hover:text-cyber-cyan transition">
+                        <i class="fa-solid fa-phone text-cyber-cyan"></i> 096-189-1670
+                    </a>
+                    <div class="flex items-center gap-2 bg-black/50 border border-cyber-blue px-4 py-2 rounded">
+                        <i class="fa-solid fa-location-dot text-cyber-cyan"></i> ระยอง, ประเทศไทย
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Two Column Layout for Profile & Skills -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <!-- Profile Summary -->
+            <section class="md:col-span-2 cyber-card p-6 rounded-lg box-glow">
+                <div class="flex items-center gap-3 mb-6 border-b border-cyber-blue/30 pb-3">
+                    <i class="fa-solid fa-user-astronaut text-2xl text-cyber-cyan"></i>
+                    <h2 class="text-2xl font-cyber font-bold text-white uppercase tracking-wider">Profile <span class="text-cyber-cyan">Summary</span></h2>
+                </div>
+                <p class="text-gray-300 leading-relaxed font-sans">
+                    เจ้าหน้าที่ไอทีซัพพอร์ตผู้เชี่ยวชาญงาน Helpdesk ทั้งแบบ Onsite และ Remote Support มีความโดดเด่นในการแก้ไขปัญหาทางเทคนิค (Troubleshooting) ทั้งด้านฮาร์ดแวร์ ซอฟต์แวร์ และระบบเครือข่าย เพื่อให้ผู้ใช้งานทำงานได้อย่างราบรื่นและต่อเนื่องที่สุด ผสานกับความสามารถในการดูแลระบบ IT Infrastructure และ CCTV ขององค์กร
+                    <br><br>
+                    เรียนรู้เทคโนโลยีใหม่ได้ไว มีทักษะการสื่อสารและทำงานเป็นทีมเป็นเลิศ พร้อมรับมือกับปัญหาเฉพาะหน้าภายใต้แรงกดดัน เพื่อดูแลและยกระดับระบบ IT ขององค์กรให้มีเสถียรภาพและปลอดภัย
+                </p>
+            </section>
+
+            <!-- Skills List -->
+            <section class="cyber-card p-6 rounded-lg box-glow">
+                <div class="flex items-center gap-3 mb-6 border-b border-cyber-blue/30 pb-3">
+                    <i class="fa-solid fa-microchip text-2xl text-cyber-cyan"></i>
+                    <h2 class="text-2xl font-cyber font-bold text-white uppercase tracking-wider">Tech <span class="text-cyber-cyan">Skills</span></h2>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <span class="skill-tag px-3 py-1 rounded text-sm text-cyan-100">Network (LAN/WLAN)</span>
+                    <span class="skill-tag px-3 py-1 rounded text-sm text-cyan-100">Router / Switch / AP</span>
+                    <span class="skill-tag px-3 py-1 rounded text-sm text-cyan-100">CCTV / NVR / DVR</span>
+                    <span class="skill-tag px-3 py-1 rounded text-sm text-cyan-100">Firewall / VPN</span>
+                    <span class="skill-tag px-3 py-1 rounded text-sm text-cyan-100">Microsoft / Google Admin</span>
+                    <span class="skill-tag px-3 py-1 rounded text-sm text-cyan-100">Cloud Service</span>
+                    <span class="skill-tag px-3 py-1 rounded text-sm text-cyan-100">Backup System</span>
+                    <span class="skill-tag px-3 py-1 rounded text-sm text-cyan-100">Access Control</span>
+                    <span class="skill-tag px-3 py-1 rounded text-sm text-cyan-100">Hardware & Software</span>
+                    <span class="skill-tag px-3 py-1 rounded text-sm text-cyan-100">Pre-Sales Support</span>
+                </div>
+            </section>
         </div>
-        <div class="md:hidden">
-            <a href="about_en.html" class="inline-flex items-center gap-2 px-2 py-1.5 rounded-lg border border-gray-200">
-              <span class="text-sm font-medium">EN</span>
-            </a>
-        </div>
-      </div>
+
+        <!-- Experience Section -->
+        <section class="cyber-card p-6 rounded-lg box-glow">
+            <div class="flex items-center gap-3 mb-8 border-b border-cyber-blue/30 pb-3">
+                <i class="fa-solid fa-briefcase text-2xl text-cyber-cyan"></i>
+                <!-- เปลี่ยนหัวข้อเป็น Work Experience -->
+                <h2 class="text-2xl font-cyber font-bold text-white uppercase tracking-wider">Work <span class="text-cyber-cyan">Experience</span></h2>
+            </div>
+            
+            <div class="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-cyber-cyan before:to-cyber-blue">
+                
+                <!-- Experience 1 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-cyber-cyan bg-cyber-dark text-cyber-cyan shadow-[0_0_10px_#00f3ff] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fa-solid fa-cloud"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded cyber-card border-cyber-cyan/50 box-glow cursor-pointer hover:-translate-y-1 transition-transform duration-300" onclick="openModal('exp1')">
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="font-bold text-cyber-cyan text-lg">IT Support Engineer</h3>
+                            <span class="text-xs font-cyber text-gray-400">Feb 2026 - Present</span>
+                        </div>
+                        <h4 class="text-white text-sm font-medium mb-3">Cloud Extreme Tech</h4>
+                        <div class="text-cyber-cyan/80 text-xs flex items-center gap-1 mt-2">
+                            <i class="fa-solid fa-arrow-pointer animate-pulse"></i> คลิกเพื่อดูรายละเอียดงาน
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience 2 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-cyber-blue bg-cyber-dark text-cyber-blue shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fa-solid fa-building"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded cyber-card border-cyber-blue/50 box-glow cursor-pointer hover:-translate-y-1 transition-transform duration-300" onclick="openModal('exp2')">
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="font-bold text-cyber-blue text-lg">Facility System Development</h3>
+                            <span class="text-xs font-cyber text-gray-400">Jun 2024 - Jun 2025</span>
+                        </div>
+                        <h4 class="text-white text-sm font-medium mb-3">Archem.inc</h4>
+                        <div class="text-cyber-blue/80 text-xs flex items-center gap-1 mt-2">
+                            <i class="fa-solid fa-arrow-pointer animate-pulse"></i> คลิกเพื่อดูรายละเอียดงาน
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience 3 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-500 bg-cyber-dark text-gray-400 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded cyber-card border-gray-500/50 box-glow cursor-pointer hover:-translate-y-1 transition-transform duration-300" onclick="openModal('exp3')">
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="font-bold text-gray-300 text-lg">IT Support</h3>
+                            <span class="text-xs font-cyber text-gray-500">Dec 2020 - Jun 2024</span>
+                        </div>
+                        <h4 class="text-gray-400 text-sm font-medium mb-3">CDT - Control Data (Thailand) Limited</h4>
+                        <div class="text-gray-400/80 text-xs flex items-center gap-1 mt-2">
+                            <i class="fa-solid fa-arrow-pointer animate-pulse"></i> คลิกเพื่อดูรายละเอียดงาน
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section class="cyber-card p-6 rounded-lg box-glow">
+            <div class="flex items-center gap-3 mb-6 border-b border-cyber-blue/30 pb-3">
+                <i class="fa-solid fa-graduation-cap text-2xl text-cyber-cyan"></i>
+                <h2 class="text-2xl font-cyber font-bold text-white uppercase tracking-wider">Education <span class="text-cyber-cyan">Log</span></h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Data Block 1 -->
+                <div class="p-5 border-l-4 border-cyber-cyan bg-white/5 rounded-r">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xl font-bold text-cyber-cyan text-glow">ปวส. สาขาเทคโนโลยีสารสนเทศ</h3>
+                        <span class="font-cyber text-sm bg-cyber-cyan/20 text-cyber-cyan px-2 py-1 rounded">2569</span>
+                    </div>
+                    <p class="text-white font-medium">วิทยาลัยเทคนิคนิคมอุตสาหกรรมระยอง</p>
+                    <p class="text-sm text-gray-400 mt-2">เกรดเฉลี่ย: 3.37</p>
+                </div>
+                
+                <!-- Data Block 2 -->
+                <div class="p-5 border-l-4 border-cyber-blue bg-white/5 rounded-r">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xl font-bold text-cyber-blue">มัธยมศึกษาตอนปลาย (ม.6)</h3>
+                        <span class="font-cyber text-sm bg-cyber-blue/20 text-cyber-blue px-2 py-1 rounded">2567</span>
+                    </div>
+                    <p class="text-white font-medium">ศูนย์ส่งเสริมการเรียนรู้ อำเภอนิคมพัฒนา</p>
+                    <p class="text-sm text-gray-400 mt-2">เกรดเฉลี่ย: 3.24</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer class="text-center mt-8 pb-8 text-gray-500 text-sm font-cyber flex flex-col items-center justify-center gap-2">
+            <div class="w-16 h-1 bg-cyber-blue rounded mb-2"></div>
+            <p>SYSTEM.PORTFOLIO // v1.0.26</p>
+            <p class="text-cyber-cyan">© 2026 RATCHANON RATTANAUBOL. ALL SYSTEMS ONLINE.</p>
+        </footer>
+
     </div>
-  </nav>
 
-  <main class="flex-grow">
-    <section class="pt-24 pb-16">
-      <div class="max-w-6xl mx-auto px-4">
-        <div class="text-center mb-16">
-          <h1 class="text-4xl font-bold text-gray-800 mb-4">เกี่ยวกับฉัน</h1>
-          <p class="text-xl text-gray-600">รัชชานนท์ รัตนอุบล (กอล์ฟ) - IT Support Specialist</p>
-        </div>
-        <div class="grid md:grid-cols-2 gap-12 mb-20">
-          <div class="space-y-6">
-            <div class="bg-white p-8 rounded-xl shadow-lg">
-              <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center"><i class="fas fa-user text-blue-600 mr-3"></i>ข้อมูลส่วนตัว</h2>
-              <div class="flex justify-center mb-6">
-                <div class="relative">
-                  <img src="mepic.jpg" alt="รัชชานนท์ รัตนอุบล" class="w-32 h-32 rounded-full object-cover border-4 border-blue-200 shadow-lg">
-                  <div class="absolute bottom-0 right-0 bg-green-500 w-8 h-8 rounded-full border-4 border-white flex items-center justify-center"><i class="fas fa-check text-white text-sm"></i></div>
+    <!-- Modals Overlay -->
+    <div id="jobModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity duration-300 opacity-0" onclick="closeModalOnOutside(event)">
+        <div class="cyber-card w-full max-w-2xl max-h-[85vh] flex flex-col rounded-lg box-glow relative transform scale-95 transition-transform duration-300" id="modalContainer">
+            <!-- Modal Header -->
+            <div class="p-4 border-b border-cyber-blue/30 flex justify-between items-center sticky top-0 bg-cyber-dark/90 backdrop-blur-md z-10 rounded-t-lg">
+                <div>
+                    <h3 id="modalTitle" class="text-xl font-bold text-cyber-cyan">Job Title</h3>
+                    <h4 id="modalCompany" class="text-sm text-gray-400 mt-1">Company Name | Date</h4>
                 </div>
-              </div>
-              <div class="space-y-4">
-                <div class="flex justify-between py-2 border-b border-gray-100"><span class="font-medium text-gray-700">ชื่อ-นามสกุล:</span><span class="text-gray-600">รัชชานนท์ รัตนอุบล</span></div>
-                <div class="flex justify-between py-2 border-b border-gray-100"><span class="font-medium text-gray-700">ชื่อเล่น:</span><span class="text-gray-600">กอล์ฟ</span></div>
-                <div class="flex justify-between py-2 border-b border-gray-100"><span class="font-medium text-gray-700">อายุ:</span><span class="text-gray-600">32 ปี</span></div>
-                <div class="flex justify-between py-2 border-b border-gray-100"><span class="font-medium text-gray-700">ที่อยู่:</span><span class="text-gray-600">ระยอง, ประเทศไทย</span></div>
-                <div class="flex justify-between py-2 border-b border-gray-100"><span class="font-medium text-gray-700">เงินเดือนที่คาดหวัง:</span><span class="text-green-600 font-semibold">29,000 บาท</span></div>
-              </div>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-cyber-cyan transition-colors p-2 rounded-full hover:bg-white/5">
+                    <i class="fa-solid fa-xmark text-2xl"></i>
+                </button>
             </div>
-            <div class="bg-white p-8 rounded-xl shadow-lg">
-              <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center"><i class="fas fa-graduation-cap text-green-600 mr-3"></i>การศึกษา</h2>
-              <div class="space-y-4">
-                <div class="border-l-4 border-blue-500 pl-4">
-                  <h3 class="font-semibold text-gray-800">ประกาศนียบัตรวิชาชีพชั้นสูง</h3>
-                  <p class="text-blue-600">วิทยาลัยเทคนิคนิคมอุตสาหกรรมระยอง</p>
-                  <p class="text-gray-600">สาขา เทคโนโลยีธุรกิจดิจิทัล (กำลังศึกษา)</p>
-                </div>
-                <div class="border-l-4 border-green-500 pl-4">
-                  <h3 class="font-semibold text-gray-800">มัธยมศึกษาตอนปลาย</h3>
-                  <p class="text-green-600">ศูนย์ส่งเสริมการเรียนรู้ อำเภอนิคมพัฒนา</p>
-                  <p class="text-gray-600">ปี 2566</p>
-                </div>
-              </div>
+            <!-- Modal Body -->
+            <div class="p-6 overflow-y-auto">
+                <ul id="modalContent" class="text-sm text-gray-300 space-y-3 list-disc list-inside">
+                    <!-- Dynamic content goes here -->
+                </ul>
             </div>
-          </div>
-          <div class="space-y-6">
-            <div class="bg-white p-8 rounded-xl shadow-lg">
-              <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center"><i class="fas fa-cogs text-purple-600 mr-3"></i>ความสามารถ</h2>
-              <div class="space-y-4">
-                <div class="flex items-start space-x-3"><i class="fas fa-check-circle text-green-500 mt-1"></i><div><h3 class="font-semibold text-gray-800">Hardware & Software</h3><p class="text-gray-600">ประกอบ, ซ่อมแซม, และอัพเกรดคอมพิวเตอร์</p></div></div>
-                <div class="flex items-start space-x-3"><i class="fas fa-check-circle text-green-500 mt-1"></i><div><h3 class="font-semibold text-gray-800">System Administration</h3><p class="text-gray-600">ติดตั้งระบบปฏิบัติการและโปรแกรม</p></div></div>
-                <div class="flex items-start space-x-3"><i class="fas fa-check-circle text-green-500 mt-1"></i><div><h3 class="font-semibold text-gray-800">Microsoft Office</h3><p class="text-gray-600">Word, PowerPoint ระดับดี</p></div></div>
-                <div class="flex items-start space-x-3"><i class="fas fa-check-circle text-green-500 mt-1"></i><div><h3 class="font-semibold text-gray-800">Adobe Photoshop</h3><p class="text-gray-600">แก้ไขและออกแบบภาพ</p></div></div>
-              </div>
-            </div>
-            <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-8 rounded-xl">
-              <h2 class="text-2xl font-bold mb-4 flex items-center"><i class="fas fa-bullseye mr-3"></i>วัตถุประสงค์การทำงาน (Career Objective)</h2>
-              <div class="space-y-4">
-                <div class="flex items-start space-x-3"><div class="bg-yellow-400 p-2 rounded-full mt-1"><i class="fas fa-rocket text-blue-900 text-sm"></i></div><div><h3 class="font-semibold text-yellow-300 mb-1">เป้าหมายระยะสั้น (1-2 ปี)</h3><p class="opacity-90">พัฒนาความเชี่ยวชาญใน Cloud Computing และ Network Security เพื่อยกระดับการให้บริการ IT Support</p></div></div>
-                <div class="flex items-start space-x-3"><div class="bg-green-400 p-2 rounded-full mt-1"><i class="fas fa-users text-blue-900 text-sm"></i></div><div><h3 class="font-semibold text-yellow-300 mb-1">เป้าหมายระยะกลาง (3-5 ปี)</h3><p class="opacity-90">ก้าวสู่ตำแหน่ง IT Manager หรือ System Administrator เพื่อนำทีมในการจัดการโครงสร้าง IT ขององค์กร</p></div></div>
-                <div class="flex items-start space-x-3"><div class="bg-purple-400 p-2 rounded-full mt-1"><i class="fas fa-trophy text-blue-900 text-sm"></i></div><div><h3 class="font-semibold text-yellow-300 mb-1">วิสัยทัศน์</h3><p class="opacity-90">มุ่งมั่นเป็น IT Professional ที่สามารถขับเคลื่อน Digital Transformation และสร้างนวัตกรรมเทคโนโลยีให้องค์กร</p></div></div>
-              </div>
-            </div>
-          </div>
         </div>
-        <div class="bg-white rounded-xl shadow-lg p-8">
-          <h2 class="text-3xl font-bold text-gray-800 text-center mb-8">ติดต่อฉัน</h2>
-          <div class="max-w-4xl mx-auto">
-            <div class="grid md:grid-cols-2 gap-8">
-              <div class="bg-gray-50 p-6 rounded-lg">
-                <h3 class="text-xl font-semibold text-gray-800 mb-6 flex items-center"><i class="fas fa-address-book text-blue-600 mr-3"></i>ช่องทางการติดต่อ</h3>
-                <div class="space-y-4">
-                  <div class="flex items-center space-x-4"><div class="bg-blue-100 p-3 rounded-lg"><i class="fas fa-envelope text-blue-600"></i></div><div><p class="font-medium text-gray-800">อีเมล</p><p class="text-gray-600">Ratchanon93g@gmail.com</p></div></div>
-                  <div class="flex items-center space-x-4"><div class="bg-green-100 p-3 rounded-lg"><i class="fas fa-phone text-green-600"></i></div><div><p class="font-medium text-gray-800">โทรศัพท์</p><p class="text-gray-600">096-189-1670</p></div></div>
-                  <div class="flex items-center space-x-4"><div class="bg-purple-100 p-3 rounded-lg"><i class="fas fa-map-marker-alt text-purple-600"></i></div><div><p class="font-medium text-gray-800">ที่อยู่</p><p class="text-gray-600">151/53 หมู่บ้านวโรรส 9 หมู่ 2<br>ต.นิคมพัฒนา อ.นิคมพัฒนา จ.ระยอง 21180</p></div></div>
-                </div>
-                <div class="mt-6 p-4 bg-blue-50 rounded-lg">
-                  <h4 class="font-semibold text-gray-800 mb-2 flex items-center"><i class="fas fa-clock text-blue-600 mr-2"></i>เวลาทำงาน</h4>
-                  <p class="text-gray-600 text-sm">จันทร์ - ศุกร์: 08:00 - 17:30 น.</p>
-                  <p class="text-gray-600 text-sm">เสาร์ - อาทิตย์: หยุด</p>
-                </div>
-              </div>
-              <div class="bg-gray-50 p-6 rounded-lg">
-                <h3 class="text-xl font-semibold text-gray-800 mb-6 flex items-center"><i class="fas fa-paper-plane text-green-600 mr-3"></i>ส่งข้อความหาฉัน</h3>
-                <form id="contactForm" class="space-y-4">
-                  <div><label class="block text-gray-700 font-medium mb-2">ชื่อ</label><input type="text" name="name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"></div>
-                  <div><label class="block text-gray-700 font-medium mb-2">อีเมล</label><input type="email" name="email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"></div>
-                  <div><label class="block text-gray-700 font-medium mb-2">เรื่อง</label><input type="text" name="subject" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"></div>
-                  <div><label class="block text-gray-700 font-medium mb-2">ข้อความ</label><textarea name="message" rows="4" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"></textarea></div>
-                  <button type="submit" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold py-2.5 rounded-lg hover:from-blue-600 hover:to-purple-700 transition duration-300 text-sm"><i class="fas fa-paper-plane mr-2"></i>ส่งข้อความ</button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <div id="modalBackdrop" class="hidden fixed inset-0 z-[200] bg-black/50"></div>
-  <div id="modal" class="hidden fixed inset-0 z-[201] flex items-center justify-center p-4">
-    <div class="w-full max-w-md bg-white rounded-2xl shadow-2xl">
-      <div class="p-6">
-        <div class="flex items-start">
-          <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-green-100"><i class="fa-solid fa-check text-green-600"></i></span>
-          <div class="ml-3">
-            <h3 class="text-xl font-bold text-gray-800">ขอบคุณที่ติดต่อมา</h3>
-            <p class="text-gray-600 mt-1">ฉันได้รับข้อความของคุณแล้ว และจะติดต่อกลับโดยเร็วที่สุด</p>
-          </div>
-          <button id="modalClose" class="ml-auto text-gray-400 hover:text-gray-600 p-2" aria-label="Close"><i class="fa-solid fa-xmark text-lg"></i></button>
-        </div>
-        <div class="mt-5">
-          <div class="h-1.5 bg-gray-100 rounded"><div id="modalBar" class="h-full bg-green-500 rounded" style="width:0%"></div></div>
-          <p class="text-xs text-gray-500 mt-2 text-right">หน้าต่างจะปิดใน 5 วินาที</p>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <script>
-  (function(){
-    const form = document.getElementById('contactForm');
-    const modal = document.getElementById('modal');
-    const backdrop = document.getElementById('modalBackdrop');
-    const closeBtn = document.getElementById('modalClose');
-    const bar = document.getElementById('modalBar');
-    let timer, raf, start, dur = 5000;
-    function openModal(){
-      backdrop.classList.remove('hidden');
-      modal.classList.remove('hidden');
-      start = performance.now();
-      const step = (t)=>{
-        const p = Math.min(1, (t - start)/dur);
-        bar.style.width = (p*100)+'%';
-        if(p < 1) raf = requestAnimationFrame(step);
-      };
-      raf = requestAnimationFrame(step);
-      timer = setTimeout(closeModal, dur);
-    }
-    function closeModal(){
-      clearTimeout(timer);
-      cancelAnimationFrame(raf);
-      backdrop.classList.add('hidden');
-      modal.classList.add('hidden');
-      bar.style.width = '0%';
-    }
-    form.addEventListener('submit', function(e){
-      e.preventDefault();
-      form.reset();
-      openModal();
-    });
-    closeBtn.addEventListener('click', closeModal);
-    backdrop.addEventListener('click', closeModal);
-    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeModal(); });
-  })();
-  </script>
-
-  <footer class="bg-gray-800 text-white py-8">
-    <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
-      <p>&copy; 2025 R.Rattanaubol . All rights reserved์</p>
-      <div class="flex space-x-6">
-        <a href="mailto:Ratchanon93g@gmail.com" class="hover:text-blue-400 transition" aria-label="email"><i class="fas fa-envelope text-xl"></i></a>
-        <a href="tel:0961891670" class="hover:text-blue-400 transition" aria-label="phone"><i class="fas fa-phone text-xl"></i></a>
-      </div>
+    <!-- Job Data Templates -->
+    <div class="hidden" id="jobData">
+        <div id="data-exp1">
+            <div class="title text-cyber-cyan">IT Support Engineer</div>
+            <div class="company">Cloud Extreme Tech | กุมภาพันธ์ 2569 - ปัจจุบัน</div>
+            <div class="details">
+                <li>ดูแลบำรุงรักษาอุปกรณ์ไอทีและระบบเครือข่ายภายในองค์กรให้พร้อมใช้งานอยู่เสมอ</li>
+                <li>ให้บริการ Helpdesk Support ทั้ง Onsite และ Remote แก้ไขปัญหา Hardware, Software และ Network</li>
+                <li>ติดตั้ง คอนฟิก และ troubleshoot อุปกรณ์เครือข่าย ได้แก่ Router, Switch และ Wireless Access Point</li>
+                <li>สนับสนุนและประสานงานด้าน Cloud Service, Backup System และระบบ Infrastructure เบื้องต้น</li>
+                <li>ออกแบบ วางแผน และให้คำปรึกษาด้านระบบเครือข่าย, CCTV, Wireless และ IT Infrastructure ให้เหมาะกับการใช้งานของลูกค้า</li>
+                <li>สำรวจหน้างาน (Site Survey) วิเคราะห์ความต้องการลูกค้า ออกแบบโซลูชันและวางแผนการติดตั้งระบบ</li>
+                <li>จัดเตรียม ติดตั้ง และส่งมอบอุปกรณ์คอมพิวเตอร์และอุปกรณ์ต่อพ่วงให้พร้อมใช้งานสำหรับลูกค้าและพนักงาน</li>
+                <li>จัดทำเอกสารการใช้งานระบบ, Network Diagram และรายงานปัญหาทางเทคนิคเพื่อสนับสนุนทีมงาน</li>
+                <li>ออกแบบ BOQ จัดทำใบเสนอราคา (Quotation) และคำนวณอุปกรณ์สำหรับโครงการ IT Infrastructure และ Network</li>
+                <li>ให้คำแนะนำด้านสินค้าและโซลูชันไอทีเช่น Network, CCTV, Server, Cloud และ Security เพื่อสนับสนุนงานขาย (Pre-Sales Support)</li>
+                <li>ประสานงาน Vendor และ Supplier ในการจัดหา ติดตั้ง แก้ไขปัญหาระบบ และติดตามความคืบหน้าโครงการ</li>
+            </div>
+        </div>
+        <div id="data-exp2">
+            <div class="title text-cyber-blue">Facility System Development</div>
+            <div class="company">Archem.inc | มิถุนายน 2567 - มิถุนายน 2568 (1 ปี)</div>
+            <div class="details">
+                <li>ให้บริการ IT Support และ Helpdesk แก่ผู้ใช้งาน ทั้ง Remote และ Onsite พร้อมติดตั้งอุปกรณ์คอมพิวเตอร์ เครื่องพิมพ์ และซอฟต์แวร์ให้พร้อมใช้งาน</li>
+                <li>รับแจ้ง ติดตาม และแก้ไขปัญหา Hardware, Software, Network และ Antivirus ผ่านโทรศัพท์ อีเมล และ Ticketing System</li>
+                <li>ดูแลจัดการ User Account และสิทธิ์การเข้าถึงระบบใน Google Admin, Microsoft Admin และ ERP (SAP Business One) ตามนโยบายบริษัท</li>
+                <li>วางแผนและดำเนินงาน Preventive Maintenance พร้อมอัปเดต OS, Software และ Security Patch เพื่อความเสถียรและปลอดภัยของระบบ</li>
+                <li>ตรวจสอบและจัดทำรายงานสถานะระบบ IT Infrastructure, Hardware และ Application ประจำวัน</li>
+                <li>ดูแลระบบเครือข่าย LAN/WLAN, Router, Switch, Access Point และการเชื่อมต่ออินเทอร์เน็ตให้พร้อมใช้งานต่อเนื่อง</li>
+                <li>ดูแลระบบ Access Control, Face Recognition, Keycard และระบบบันทึกเวลาทำงาน พร้อมจัดทำรายงานส่งฝ่าย HR</li>
+                <li>ตรวจสอบและบำรุงรักษาระบบ CCTV, NVR/DVR รวมถึงสำรองข้อมูลภาพย้อนหลังตามที่ได้รับมอบหมาย</li>
+                <li>ดูแลและทดสอบระบบ PA System และ Fire Alarm System ให้พร้อมตอบสนองต่อเหตุฉุกเฉิน</li>
+                <li>บริหารทะเบียนทรัพย์สินไอที (IT Asset Inventory) และจัดทำเอกสาร IT Audit, Software License, Warranty และ SLA เพื่อรองรับมาตรฐาน ISO 9001 / ISO 27001</li>
+                <li>ประสานงานกับ Vendor/Supplier และ Escalate ปัญหาระบบที่ซับซ้อนให้ผู้ดูแลระบบหรือหัวหน้างาน</li>
+            </div>
+        </div>
+        <div id="data-exp3">
+            <div class="title text-gray-300">IT Support</div>
+            <div class="company">CDT - Control Data (Thailand) Limited, CDG Group | ธันวาคม 2563 - มิถุนายน 2567</div>
+            <div class="details">
+                <li>ให้บริการ Helpdesk และ Onsite Support ออกหน่วยบริการนอกสถานที่เพื่อดูแลระบบ ณ จุดติดตั้งของลูกค้าตามที่ได้รับมอบหมาย</li>
+                <li>รับแจ้งปัญหาผ่านโทรศัพท์ อีเมล และระบบ Ticket พร้อมเร่งแก้ไขให้เป็นไปตามกำหนดเวลา (SLA)</li>
+                <li>จัดทำเอกสาร บันทึกประวัติการซ่อม จัดทำคู่มือการใช้งานระบบ และสรุปรายงานส่งหัวหน้างาน</li>
+                <li>แนะนำและอบรมวิธีใช้งานระบบและอุปกรณ์เบื้องต้นให้แก่ผู้ใช้งาน (End-user) เพื่อลดการเกิดปัญหาซ้ำ</li>
+                <li>ดูแลระบบเครือข่ายและข้อมูล ช่วยสำรอง (Backup) และกู้คืนข้อมูลเมื่อระบบมีปัญหา</li>
+                <li>ตั้งค่าและดูแลระบบความปลอดภัยพื้นฐาน เช่น Firewall และ VPN สำหรับการทำงานระยะไกล</li>
+                <li>ซ่อมแซมเบื้องต้น ตรวจเช็ค และแก้ไขปัญหาคอมพิวเตอร์ โน้ตบุ๊ก เครื่องพิมพ์ และอุปกรณ์ต่อพ่วง</li>
+                <li>จัดเตรียมเครื่อง ติดตั้งระบบปฏิบัติการ (Windows/macOS) และโปรแกรมพื้นฐานให้พร้อมใช้งาน</li>
+                <li>จัดทำทะเบียนทรัพย์สิน ตรวจนับ และควบคุมการเบิกจ่ายอุปกรณ์ไอทีภายในองค์กร</li>
+            </div>
+        </div>
     </div>
-  </footer>
 
+    <!-- Modal Scripts -->
+    <script>
+        const modal = document.getElementById('jobModal');
+        const modalContainer = document.getElementById('modalContainer');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalCompany = document.getElementById('modalCompany');
+        const modalContent = document.getElementById('modalContent');
+
+        function openModal(jobId) {
+            const dataElement = document.getElementById('data-' + jobId);
+            if (!dataElement) return;
+
+            // นำข้อมูลไปใส่ใน Modal
+            modalTitle.innerHTML = dataElement.querySelector('.title').innerHTML;
+            modalCompany.innerHTML = dataElement.querySelector('.company').innerHTML;
+            modalContent.innerHTML = dataElement.querySelector('.details').innerHTML;
+            
+            // ปรับสี Title ตามตำแหน่ง
+            modalTitle.className = dataElement.querySelector('.title').className + ' text-xl font-bold';
+
+            // แสดง Modal
+            modal.classList.remove('hidden');
+            // ทำดีเลย์เล็กน้อยเพื่อให้ Animation ทำงาน
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContainer.classList.remove('scale-95');
+            }, 10);
+            
+            // ล็อกไม่ให้หน้าหลังเลื่อนขึ้นลงได้
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            // เล่น Animation ปิด
+            modal.classList.add('opacity-0');
+            modalContainer.classList.add('scale-95');
+            
+            // ซ่อนกล่องหลังจากเล่น Animation เสร็จ
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        function closeModalOnOutside(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // กดปุ่ม ESC เพื่อปิด
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape" && !modal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+    </script>
+
+    <!-- Scripts for Canvas Network Effect -->
+    <script>
+        const canvas = document.getElementById('network-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+        
+        const particles = [];
+        const properties = {
+            bgColor: 'rgba(5, 10, 21, 1)',
+            particleColor: 'rgba(0, 243, 255, 0.5)',
+            particleRadius: 2,
+            particleCount: 60,
+            particleMaxVelocity: 0.5,
+            lineLength: 150,
+            particleLife: 6
+        };
+
+        window.onresize = function(){
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.velocityX = Math.random() * (properties.particleMaxVelocity * 2) - properties.particleMaxVelocity;
+                this.velocityY = Math.random() * (properties.particleMaxVelocity * 2) - properties.particleMaxVelocity;
+                this.life = Math.random() * properties.particleLife * 60;
+            }
+            
+            position() {
+                this.x + this.velocityX > width && this.velocityX > 0 || this.x + this.velocityX < 0 && this.velocityX < 0 ? this.velocityX *= -1 : this.velocityX;
+                this.y + this.velocityY > height && this.velocityY > 0 || this.y + this.velocityY < 0 && this.velocityY < 0 ? this.velocityY *= -1 : this.velocityY;
+                this.x += this.velocityX;
+                this.y += this.velocityY;
+            }
+            
+            reDraw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, properties.particleRadius, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.fillStyle = properties.particleColor;
+                ctx.fill();
+            }
+            
+            reCalculateLife() {
+                if(this.life < 1){
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.velocityX = Math.random() * (properties.particleMaxVelocity * 2) - properties.particleMaxVelocity;
+                    this.velocityY = Math.random() * (properties.particleMaxVelocity * 2) - properties.particleMaxVelocity;
+                    this.life = Math.random() * properties.particleLife * 60;
+                }
+                this.life--;
+            }
+        }
+
+        function reDrawBackground() {
+            ctx.fillStyle = properties.bgColor;
+            ctx.fillRect(0, 0, width, height);
+        }
+
+        function drawLines() {
+            let x1, y1, x2, y2, length, opacity;
+            for(let i in particles){
+                for(let j in particles){
+                    x1 = particles[i].x;
+                    y1 = particles[i].y;
+                    x2 = particles[j].x;
+                    y2 = particles[j].y;
+                    length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                    if(length < properties.lineLength){
+                        opacity = 1 - length / properties.lineLength;
+                        ctx.lineWidth = '0.5';
+                        ctx.strokeStyle = 'rgba(0, 102, 255, '+opacity+')';
+                        ctx.beginPath();
+                        ctx.moveTo(x1, y1);
+                        ctx.lineTo(x2, y2);
+                        ctx.closePath();
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function reDrawParticles() {
+            for(let i in particles){
+                particles[i].reCalculateLife();
+                particles[i].position();
+                particles[i].reDraw();
+            }
+        }
+
+        function loop() {
+            ctx.clearRect(0,0, width, height);
+            reDrawParticles();
+            drawLines();
+            requestAnimationFrame(loop);
+        }
+
+        function init() {
+            for(let i = 0 ; i < properties.particleCount ; i++){
+                particles.push(new Particle);
+            }
+            loop();
+        }
+
+        init();
+    </script>
 </body>
-
 </html>
-
-
-
-
