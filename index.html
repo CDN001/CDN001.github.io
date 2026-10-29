@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Ratchanon Rattanaubol - IT Support Engineer | Helpdesk, Network, CCTV, ERP SAP B1, Pre-Sales & AI-assisted workflow">
+    <meta name="theme-color" content="#050a15">
     <title>Ratchanon Rattanaubol | Cyber Portfolio</title>
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700&family=Orbitron:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -19,17 +21,15 @@
                     fontFamily: {
                         sans: ['Kanit', 'sans-serif'],
                         cyber: ['Orbitron', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
                     },
                     colors: {
                         cyber: {
                             dark: '#050a15',
-                            cyan: '#00f3ff',
+                            cyan: 'rgb(var(--cyan) / <alpha-value>)',
                             blue: '#0066ff',
                             purple: '#bc13fe',
                         }
-                    },
-                    animation: {
-                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     }
                 }
             }
@@ -40,140 +40,255 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        body {
-            background-color: #050a15;
-            color: #e2e8f0;
-            overflow-x: hidden;
-        }
+        :root { --cyan: 0 243 255; }
+        html.js [data-reveal] { opacity: 0; transform: translateY(28px); transition: opacity .8s ease, transform .8s ease; }
+        html.js [data-reveal].in { opacity: 1; transform: none; }
 
-        /* Neon Glow Effects */
-        .text-glow {
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.8), 0 0 20px rgba(0, 243, 255, 0.4);
-        }
-        
-        .box-glow {
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2), inset 0 0 10px rgba(0, 243, 255, 0.1);
-        }
-        
-        .box-glow:hover {
-            box-shadow: 0 0 25px rgba(0, 243, 255, 0.5), inset 0 0 15px rgba(0, 243, 255, 0.2);
-            border-color: #00f3ff;
-        }
+        body { background-color: #050a15; color: #e2e8f0; overflow-x: hidden; }
+        body.booting { overflow: hidden; }
+        ::selection { background: rgb(var(--cyan)); color: #000; }
 
-        /* Cyberpunk Borders */
+        /* Neon Glow */
+        .text-glow { text-shadow: 0 0 10px rgb(var(--cyan) / .8), 0 0 20px rgb(var(--cyan) / .4); }
+        .box-glow { box-shadow: 0 0 15px rgb(var(--cyan) / .2), inset 0 0 10px rgb(var(--cyan) / .1); }
+        .box-glow:hover { box-shadow: 0 0 25px rgb(var(--cyan) / .5), inset 0 0 15px rgb(var(--cyan) / .2); border-color: rgb(var(--cyan)); }
+
+        /* Cyber card */
         .cyber-card {
             position: relative;
-            background: rgba(5, 10, 21, 0.7);
+            background: rgba(5, 10, 21, 0.72);
             border: 1px solid rgba(0, 102, 255, 0.3);
             backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
+            transition: box-shadow .3s ease, border-color .3s ease, transform .2s ease;
         }
-        
-        .cyber-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 10px;
-            height: 10px;
-            border-top: 2px solid #00f3ff;
-            border-left: 2px solid #00f3ff;
+        .cyber-card::before, .cyber-card::after {
+            content: ''; position: absolute; width: 12px; height: 12px; pointer-events: none;
+            border: 0 solid rgb(var(--cyan));
         }
-        
-        .cyber-card::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 10px;
-            height: 10px;
-            border-bottom: 2px solid #00f3ff;
-            border-right: 2px solid #00f3ff;
-        }
+        .cyber-card::before { top: -1px; left: -1px; border-top-width: 2px; border-left-width: 2px; }
+        .cyber-card::after { bottom: -1px; right: -1px; border-bottom-width: 2px; border-right-width: 2px; }
 
-        /* Scanline Overlay */
-        .scanlines {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: linear-gradient(
-                to bottom,
-                rgba(255,255,255,0),
-                rgba(255,255,255,0) 50%,
-                rgba(0,0,0,0.2) 50%,
-                rgba(0,0,0,0.2)
-            );
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: 50;
-            opacity: 0.3;
+        /* Spotlight following the cursor inside cards */
+        .spot { --mx: 50%; --my: 50%; }
+        .spot > * { position: relative; z-index: 1; }
+        .spot .spot-fx {
+            position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: 0; transition: opacity .3s;
+            background: radial-gradient(260px circle at var(--mx) var(--my), rgb(var(--cyan) / .14), transparent 70%);
         }
+        .spot:hover .spot-fx { opacity: 1; }
+
+        /* Scanlines */
+        .scanlines {
+            position: fixed; inset: 0; pointer-events: none; z-index: 60; opacity: .25;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,.2) 50%, rgba(0,0,0,.2));
+            background-size: 100% 4px; transition: opacity .3s;
+        }
+        body.no-fx .scanlines { opacity: 0; }
+        body.no-fx #net { opacity: 0; }
 
         /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #050a15;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #0066ff;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #00f3ff;
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #050a15; }
+        ::-webkit-scrollbar-thumb { background: #0066ff; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgb(var(--cyan)); }
 
-        /* Custom Typing Cursor */
-        .typing-cursor::after {
-            content: '|';
-            animation: blink 1s step-start infinite;
-            color: #00f3ff;
-        }
+        /* Typing cursor */
+        .typing-cursor::after { content: '|'; animation: blink 1s step-start infinite; color: rgb(var(--cyan)); margin-left: 2px; }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* Skill Tag */
+        /* Skill tag */
         .skill-tag {
-            background: linear-gradient(45deg, rgba(0, 102, 255, 0.1), rgba(0, 243, 255, 0.05));
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            transition: all 0.3s;
+            background: linear-gradient(45deg, rgba(0,102,255,.1), rgb(var(--cyan) / .05));
+            border: 1px solid rgb(var(--cyan) / .3); transition: all .3s;
         }
-        .skill-tag:hover {
-            background: rgba(0, 243, 255, 0.2);
-            border-color: #00f3ff;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 243, 255, 0.3);
+        .skill-tag:hover { background: rgb(var(--cyan) / .2); border-color: rgb(var(--cyan)); transform: translateY(-2px); box-shadow: 0 5px 15px rgb(var(--cyan) / .3); }
+
+        /* Glitch name */
+        .glitch { position: relative; display: inline-block; }
+        .glitch::before, .glitch::after {
+            content: attr(data-text); position: absolute; inset: 0; opacity: 0; pointer-events: none;
+        }
+        .glitch::before { color: #ff2d95; }
+        .glitch::after { color: #00e5ff; }
+        .glitch.go::before { animation: glitch1 .45s steps(2) 1; }
+        .glitch.go::after { animation: glitch2 .45s steps(2) 1; }
+        @keyframes glitch1 {
+            0% { opacity: .9; transform: translate(-3px, 1px); clip-path: inset(10% 0 60% 0); }
+            50% { opacity: .9; transform: translate(3px, -1px); clip-path: inset(55% 0 10% 0); }
+            100% { opacity: 0; transform: none; }
+        }
+        @keyframes glitch2 {
+            0% { opacity: .9; transform: translate(3px, -1px); clip-path: inset(60% 0 8% 0); }
+            50% { opacity: .9; transform: translate(-3px, 1px); clip-path: inset(8% 0 62% 0); }
+            100% { opacity: 0; transform: none; }
+        }
+
+        /* Rotating HUD rings */
+        .ring { position: absolute; inset: 0; border-radius: 9999px; border: 2px solid transparent; }
+        .ring.r1 { border-top-color: rgb(var(--cyan)); border-bottom-color: rgb(var(--cyan) / .3); animation: spin 6s linear infinite; }
+        .ring.r2 { inset: -14px; border: 1px dashed rgb(var(--cyan) / .5); animation: spin 18s linear infinite reverse; }
+        .ring.r3 { inset: -28px; border: 1px solid rgba(0,102,255,.35); border-left-color: transparent; animation: spin 10s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Skill bars */
+        .bar { height: 6px; background: rgba(255,255,255,.08); border-radius: 9999px; overflow: hidden; }
+        .bar > i {
+            display: block; height: 100%; width: 0; border-radius: inherit;
+            background: linear-gradient(90deg, #0066ff, rgb(var(--cyan)));
+            box-shadow: 0 0 10px rgb(var(--cyan) / .7); transition: width 1.4s cubic-bezier(.2,.8,.2,1);
+        }
+
+        /* Timeline */
+        .timeline { position: relative; padding-left: 3.25rem; }
+        .timeline::before {
+            content: ''; position: absolute; left: 1.15rem; top: 0; bottom: 0; width: 2px;
+            background: linear-gradient(to bottom, rgb(var(--cyan)), #0066ff, transparent);
+        }
+        .tl-dot {
+            position: absolute; left: -3.25rem; top: .25rem; width: 2.5rem; height: 2.5rem; border-radius: 9999px;
+            display: flex; align-items: center; justify-content: center; background: #050a15; z-index: 2;
+        }
+
+        /* Nav */
+        .nav-link { position: relative; color: #94a3b8; transition: color .3s; }
+        .nav-link::after { content: ''; position: absolute; left: 0; bottom: -6px; height: 2px; width: 0; background: rgb(var(--cyan)); transition: width .3s; box-shadow: 0 0 8px rgb(var(--cyan)); }
+        .nav-link:hover, .nav-link.active { color: rgb(var(--cyan)); }
+        .nav-link.active::after, .nav-link:hover::after { width: 100%; }
+
+        /* Terminal */
+        #termBody { scrollbar-width: thin; }
+        #termBody .ok { color: #4ade80; }
+        #termBody .cy { color: rgb(var(--cyan)); }
+        #termBody .dim { color: #64748b; }
+        #termBody .warn { color: #fbbf24; }
+
+        /* Cursor glow */
+        #glow {
+            position: fixed; left: 0; top: 0; width: 420px; height: 420px; margin: -210px 0 0 -210px; border-radius: 9999px; z-index: 1;
+            pointer-events: none; background: radial-gradient(circle, rgb(var(--cyan) / .10), transparent 65%); opacity: 0; transition: opacity .4s;
+            will-change: transform;
+        }
+
+        /* Boot screen */
+        #boot { position: fixed; inset: 0; z-index: 200; background: #02050b; display: flex; align-items: center; justify-content: center; transition: opacity .6s ease, visibility .6s; }
+        #boot.done { opacity: 0; visibility: hidden; }
+
+        /* Toast */
+        #toast { position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 30px); opacity: 0; z-index: 150; transition: all .35s ease; pointer-events: none; }
+        #toast.show { transform: translate(-50%, 0); opacity: 1; }
+
+        /* Modal */
+        #jobModal.open { opacity: 1; }
+        #jobModal.open #modalContainer { transform: scale(1); }
+
+        /* Konami / hue easter egg */
+        body.rainbow { animation: hue 4s linear infinite; }
+        @keyframes hue { to { filter: hue-rotate(360deg); } }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: .001s !important; animation-iteration-count: 1 !important; transition-duration: .001s !important; }
+            html.js [data-reveal] { opacity: 1; transform: none; }
+        }
+
+        /* Print = resume-style PDF */
+        @media print {
+            body { background: #fff !important; color: #111 !important; }
+            #net, .scanlines, #glow, #boot, #toast, nav, #termSection, #topBtn, #progress, .no-print, .spot-fx { display: none !important; }
+            .cyber-card { background: #fff !important; border: 1px solid #ccc !important; box-shadow: none !important; backdrop-filter: none !important; color: #111 !important; break-inside: avoid; }
+            .cyber-card::before, .cyber-card::after { display: none; }
+            * { color: #111 !important; text-shadow: none !important; }
+            html.js [data-reveal] { opacity: 1 !important; transform: none !important; }
+            .bar > i { background: #333 !important; box-shadow: none !important; }
         }
     </style>
+    <script>document.documentElement.classList.add('js');</script>
 </head>
-<body class="antialiased selection:bg-cyber-cyan selection:text-black">
+<body class="antialiased font-sans booting">
 
-    <!-- Scanline Effect -->
+    <!-- Boot Screen -->
+    <div id="boot" role="status" aria-label="Loading">
+        <div class="w-full max-w-xl px-6 font-mono text-sm">
+            <div id="bootLog" class="text-cyber-cyan/90 space-y-1 min-h-[9rem]"></div>
+            <div class="mt-5 h-1.5 bg-white/10 rounded overflow-hidden"><div id="bootBar" class="h-full w-0 bg-cyber-cyan shadow-[0_0_12px_rgb(var(--cyan))] transition-all duration-200"></div></div>
+            <button id="bootSkip" class="mt-4 text-xs text-gray-500 hover:text-cyber-cyan transition">[ กดเพื่อข้าม / SKIP ]</button>
+        </div>
+    </div>
+
+    <!-- Effects -->
     <div class="scanlines"></div>
+    <div id="progress" class="fixed top-0 left-0 h-[3px] w-0 z-[120] bg-gradient-to-r from-cyber-blue via-cyber-cyan to-cyber-purple shadow-[0_0_10px_rgb(var(--cyan))]"></div>
+    <div id="glow"></div>
+    <canvas id="net" class="fixed inset-0 w-full h-full z-0 opacity-50 pointer-events-none transition-opacity duration-500"></canvas>
 
-    <!-- Network Animation Canvas -->
-    <canvas id="network-canvas" class="fixed top-0 left-0 w-full h-full z-0 opacity-40 pointer-events-none"></canvas>
-
-    <!-- Main Content -->
-    <div class="relative z-10 max-w-5xl mx-auto px-4 py-12 md:py-20 flex flex-col gap-12">
-        
-        <!-- Header Section -->
-        <header class="text-center md:text-left flex flex-col md:flex-row items-center gap-8 cyber-card p-8 rounded-lg box-glow">
-            <div class="w-40 h-40 md:w-48 md:h-48 rounded-full border-4 border-cyber-cyan p-1 relative group overflow-hidden">
-                <div class="absolute inset-0 border-4 border-transparent border-t-cyber-blue rounded-full animate-spin" style="animation-duration: 3s;"></div>
-                <!-- ถอดเอฟเฟกต์ขาวดำออกเพื่อให้แสดงสี 100% ตลอดเวลา -->
-                <img src="profilem.png" alt="Ratchanon Rattanaubol" class="w-full h-full object-cover rounded-full transition duration-500">
+    <!-- Navigation -->
+    <nav class="fixed top-0 inset-x-0 z-[90] transition-all duration-300" id="navbar">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <a href="#top" class="font-cyber font-bold text-white tracking-widest text-lg">R<span class="text-cyber-cyan">.</span>RATTANAUBOL</a>
+            <div class="hidden lg:flex items-center gap-7 text-sm font-medium">
+                <a href="#about" class="nav-link">About</a>
+                <a href="#experience" class="nav-link">Experience</a>
+                <a href="#education" class="nav-link">Education</a>
+                <a href="#contact" class="nav-link">Contact</a>
             </div>
-            
-            <div class="flex-1">
-                <h2 class="text-cyber-cyan font-cyber tracking-widest text-sm mb-2 uppercase">System_Initialized_</h2>
-                <h1 class="text-4xl md:text-5xl font-cyber font-bold text-white mb-2 text-glow">Ratchanon <br class="hidden md:block"> Rattanaubol</h1>
-                <h3 class="text-xl md:text-2xl text-gray-300 font-light mb-4">รัชชานนท์ รัตนอุบล</h3>
-                <p class="text-cyber-cyan font-cyber text-lg md:text-xl typing-cursor mb-6">IT SUPPORT ENGINEER</p>
-                
-                <div class="flex flex-wrap justify-center md:justify-start gap-4 text-sm font-sans">
+            <div class="flex items-center gap-2">
+                <div class="hidden sm:flex items-center gap-1.5 mr-2" id="themeDots" aria-label="Theme colors">
+                    <button data-theme="0 243 255" class="w-4 h-4 rounded-full bg-[#00f3ff] ring-2 ring-white/70" title="Cyan"></button>
+                    <button data-theme="57 255 20" class="w-4 h-4 rounded-full bg-[#39ff14] ring-2 ring-transparent" title="Matrix Green"></button>
+                    <button data-theme="188 19 254" class="w-4 h-4 rounded-full bg-[#bc13fe] ring-2 ring-transparent" title="Purple"></button>
+                    <button data-theme="255 176 0" class="w-4 h-4 rounded-full bg-[#ffb000] ring-2 ring-transparent" title="Amber"></button>
+                </div>
+                <button id="fxBtn" class="text-gray-400 hover:text-cyber-cyan transition w-9 h-9 rounded border border-cyber-blue/40 hover:border-cyber-cyan" title="เปิด/ปิดเอฟเฟกต์พื้นหลัง"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+                <button onclick="window.print()" class="no-print text-gray-400 hover:text-cyber-cyan transition w-9 h-9 rounded border border-cyber-blue/40 hover:border-cyber-cyan" title="บันทึกเป็น PDF / พิมพ์"><i class="fa-solid fa-file-pdf"></i></button>
+                <button id="menuBtn" class="lg:hidden text-gray-300 hover:text-cyber-cyan w-9 h-9 rounded border border-cyber-blue/40" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+            </div>
+        </div>
+        <div id="mobileMenu" class="hidden lg:hidden bg-cyber-dark/95 backdrop-blur border-t border-cyber-blue/30 px-4 py-4 flex-col gap-3 text-sm">
+            <a href="#about" class="block py-1 nav-link">About</a>
+            <a href="#experience" class="block py-1 nav-link">Experience</a>
+            <a href="#education" class="block py-1 nav-link">Education</a>
+            <a href="#contact" class="block py-1 nav-link">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Main -->
+    <main id="top" class="relative z-10 max-w-6xl mx-auto px-4 pt-28 pb-12 flex flex-col gap-14 md:gap-20">
+
+        <!-- HERO -->
+        <header class="cyber-card spot rounded-lg box-glow p-6 md:p-10 grid md:grid-cols-[auto_1fr] items-center gap-10" data-reveal>
+            <div class="spot-fx"></div>
+            <div class="relative mx-auto w-44 h-44 md:w-56 md:h-56 tilt">
+                <div class="ring r3"></div><div class="ring r2"></div><div class="ring r1"></div>
+                <div class="absolute inset-3 rounded-full overflow-hidden border-2 border-cyber-cyan/70 group bg-cyber-dark">
+                    <img id="avatar" src="https://drive.google.com/uc?export=view&id=1Seh8r6B65jjntwxFQUw68TxoGTVBrtwS" alt="Ratchanon Rattanaubol" class="w-full h-full object-cover filter grayscale contrast-125 hover:grayscale-0 transition duration-500">
+                    <div id="avatarFallback" class="hidden absolute inset-0 items-center justify-center font-cyber text-5xl text-cyber-cyan bg-cyber-dark">RR</div>
+                </div>
+                <span class="absolute bottom-3 right-3 w-4 h-4 rounded-full bg-green-400 ring-4 ring-cyber-dark animate-pulse" title="Online"></span>
+            </div>
+
+            <div class="text-center md:text-left">
+                <div class="inline-flex items-center gap-2 font-mono text-xs text-cyber-cyan border border-cyber-cyan/40 bg-cyber-cyan/10 px-3 py-1 rounded-full mb-4">
+                    <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span> SYSTEM_INITIALIZED // ONLINE
+                </div>
+                <h1 class="text-4xl md:text-6xl font-cyber font-black text-white mb-2 text-glow leading-tight">
+                    <span class="glitch" id="glitchName" data-text="Ratchanon">Ratchanon</span><br class="hidden md:block">
+                    <span class="glitch" data-text="Rattanaubol" id="glitchName2">Rattanaubol</span>
+                </h1>
+                <h2 class="text-xl md:text-2xl text-gray-300 font-light mb-4">รัชชานนท์ รัตนอุบล</h2>
+                <p class="text-cyber-cyan font-cyber text-base md:text-xl mb-6 h-8"><span id="typed" class="typing-cursor"></span></p>
+
+                <div class="flex flex-wrap justify-center md:justify-start gap-3 mb-6 text-sm">
+                    <a href="#contact" class="inline-flex items-center gap-2 bg-cyber-cyan text-black font-bold px-5 py-2.5 rounded hover:shadow-[0_0_25px_rgb(var(--cyan)/.8)] hover:-translate-y-0.5 transition">
+                        <i class="fa-solid fa-paper-plane"></i> ติดต่อฉัน
+                    </a>
+                    <a href="#experience" class="inline-flex items-center gap-2 border border-cyber-cyan text-cyber-cyan px-5 py-2.5 rounded hover:bg-cyber-cyan/10 hover:-translate-y-0.5 transition">
+                        <i class="fa-solid fa-terminal"></i> ดูผลงาน / ประสบการณ์
+                    </a>
+                    <button onclick="window.print()" class="no-print inline-flex items-center gap-2 border border-cyber-blue text-gray-300 px-5 py-2.5 rounded hover:border-cyber-cyan hover:text-cyber-cyan hover:-translate-y-0.5 transition">
+                        <i class="fa-solid fa-download"></i> บันทึกเป็น PDF
+                    </button>
+                </div>
+
+                <div class="flex flex-wrap justify-center md:justify-start gap-3 text-sm">
                     <a href="mailto:ratchanon93g@gmail.com" class="flex items-center gap-2 bg-black/50 border border-cyber-blue px-4 py-2 rounded hover:border-cyber-cyan hover:text-cyber-cyan transition">
                         <i class="fa-solid fa-envelope text-cyber-cyan"></i> ratchanon93g@gmail.com
                     </a>
@@ -187,127 +302,108 @@
             </div>
         </header>
 
-        <!-- Two Column Layout for Profile & Skills -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            
-            <!-- Profile Summary -->
-            <section class="md:col-span-2 cyber-card p-6 rounded-lg box-glow">
+        <!-- STATS -->
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-4" data-reveal aria-label="Highlights">
+            <div class="cyber-card spot rounded-lg p-5 text-center box-glow tilt"><div class="spot-fx"></div>
+                <div class="font-cyber text-4xl font-black text-cyber-cyan text-glow"><span class="count" data-years>5</span>+</div>
+                <div class="text-xs text-gray-400 mt-1 uppercase tracking-wider">ปีประสบการณ์ IT Support</div>
+            </div>
+            <div class="cyber-card spot rounded-lg p-5 text-center box-glow tilt"><div class="spot-fx"></div>
+                <div class="font-cyber text-4xl font-black text-cyber-cyan text-glow"><span class="count" data-to="3">0</span></div>
+                <div class="text-xs text-gray-400 mt-1 uppercase tracking-wider">องค์กรที่เคยร่วมงาน</div>
+            </div>
+            <div class="cyber-card spot rounded-lg p-5 text-center box-glow tilt"><div class="spot-fx"></div>
+                <div class="font-cyber text-4xl font-black text-cyber-cyan text-glow"><span class="count" data-to="10">0</span>+</div>
+                <div class="text-xs text-gray-400 mt-1 uppercase tracking-wider">ระบบ IT ที่ดูแลได้</div>
+            </div>
+            <div class="cyber-card spot rounded-lg p-5 text-center box-glow tilt"><div class="spot-fx"></div>
+                <div class="font-cyber text-4xl font-black text-cyber-cyan text-glow"><span class="count" data-to="2">0</span></div>
+                <div class="text-xs text-gray-400 mt-1 uppercase tracking-wider">Onsite &amp; Remote Support</div>
+            </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section id="about" class="scroll-mt-24 grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 cyber-card spot p-6 md:p-8 rounded-lg box-glow" data-reveal>
+                <div class="spot-fx"></div>
                 <div class="flex items-center gap-3 mb-6 border-b border-cyber-blue/30 pb-3">
                     <i class="fa-solid fa-user-astronaut text-2xl text-cyber-cyan"></i>
                     <h2 class="text-2xl font-cyber font-bold text-white uppercase tracking-wider">Profile <span class="text-cyber-cyan">Summary</span></h2>
                 </div>
-                <p class="text-gray-300 leading-relaxed font-sans">
-                    เจ้าหน้าที่ไอทีซัพพอร์ตผู้เชี่ยวชาญงาน Helpdesk ทั้งแบบ Onsite และ Remote Support มีความโดดเด่นในการแก้ไขปัญหาทางเทคนิค (Troubleshooting) ทั้งด้านฮาร์ดแวร์ ซอฟต์แวร์ และระบบเครือข่าย เพื่อให้ผู้ใช้งานทำงานได้อย่างราบรื่นและต่อเนื่องที่สุด ผสานกับความสามารถในการดูแลระบบ IT Infrastructure และ CCTV ขององค์กร
-                    <br><br>
-                    เรียนรู้เทคโนโลยีใหม่ได้ไว มีทักษะการสื่อสารและทำงานเป็นทีมเป็นเลิศ พร้อมรับมือกับปัญหาเฉพาะหน้าภายใต้แรงกดดัน เพื่อดูแลและยกระดับระบบ IT ขององค์กรให้มีเสถียรภาพและปลอดภัย
-                </p>
-            </section>
+                <div class="text-gray-300 leading-relaxed space-y-5">
+                    <p>
+                        ไอทีซัพพอร์ตผู้เชี่ยวชาญงาน <b class="text-white">Helpdesk</b> ทั้ง <b class="text-white">Onsite</b> และ <b class="text-white">Remote Support</b>
+                        แก้ไขปัญหา Hardware, Software และ Network ให้ผู้ใช้งานทำงานได้อย่างต่อเนื่อง
+                        พร้อมดูแล <b class="text-cyber-cyan">IT Infrastructure</b>, <b class="text-cyber-cyan">CCTV</b>,
+                        <b class="text-cyber-cyan">Google Workspace</b>, <b class="text-cyber-cyan">Microsoft Admin</b> และ <b class="text-cyber-cyan">SAP Business One Support</b> ขององค์กร
+                        รวมถึงสำรวจความต้องการ ทำ BOQ และ <b class="text-white">ใบเสนอราคา (Quotation)</b> เพื่อสนับสนุนงานขาย
+                    </p>
+                    <p>
+                        เรียนรู้เทคโนโลยีใหม่ได้เร็ว สื่อสารและทำงานเป็นทีมได้ดี รับมือปัญหาเฉพาะหน้าภายใต้แรงกดดัน
+                        และใช้ <b class="text-cyber-cyan">AI</b> ช่วยเพิ่มประสิทธิภาพงานได้อย่างชำนาญ เพื่อให้ระบบ IT ขององค์กรเสถียรและปลอดภัย
+                    </p>
+                </div>
+                <div class="mt-6 flex flex-wrap gap-2 text-xs font-mono">
+                    <span class="px-3 py-1 rounded-full border border-cyber-cyan/40 text-cyber-cyan"><i class="fa-solid fa-headset mr-1"></i>Helpdesk</span>
+                    <span class="px-3 py-1 rounded-full border border-cyber-cyan/40 text-cyber-cyan"><i class="fa-solid fa-bug mr-1"></i>Troubleshooting</span>
+                    <span class="px-3 py-1 rounded-full border border-cyber-cyan/40 text-cyber-cyan"><i class="fa-solid fa-file-invoice-dollar mr-1"></i>Quotation / BOQ</span>
+                    <span class="px-3 py-1 rounded-full border border-cyber-cyan/40 text-cyber-cyan"><i class="fa-solid fa-robot mr-1"></i>AI-Powered</span>
+                </div>
+            </div>
 
-            <!-- Skills List -->
-            <section class="cyber-card p-6 rounded-lg box-glow">
+            <!-- Quick tags -->
+            <div class="cyber-card spot p-6 rounded-lg box-glow" data-reveal>
+                <div class="spot-fx"></div>
                 <div class="flex items-center gap-3 mb-6 border-b border-cyber-blue/30 pb-3">
                     <i class="fa-solid fa-microchip text-2xl text-cyber-cyan"></i>
-                    <h2 class="text-2xl font-cyber font-bold text-white uppercase tracking-wider">Tech <span class="text-cyber-cyan">Skills</span></h2>
+                    <h2 class="text-2xl font-cyber font-bold text-white uppercase tracking-wider">Tech <span class="text-cyber-cyan">Stack</span></h2>
                 </div>
                 <div class="flex flex-wrap gap-2">
                     <span class="skill-tag px-3 py-1 rounded text-sm text-cyan-100">Network (LAN/WLAN)</span>
                     <span class="skill-tag px-3 py-1 rounded text-sm text-cyan-100">Router / Switch / AP</span>
                     <span class="skill-tag px-3 py-1 rounded text-sm text-cyan-100">CCTV / NVR / DVR</span>
                     <span class="skill-tag px-3 py-1 rounded text-sm text-cyan-100">Firewall / VPN</span>
-                    <span class="skill-tag px-3 py-1 rounded text-sm text-cyan-100">Microsoft / Google Admin</span>
+                    <span class="skill-tag px-3 py-1 rounded text-sm text-cyan-100">Google Workspace / Microsoft Admin</span>
+                    <span class="skill-tag px-3 py-1 rounded text-sm text-cyan-100">SAP Business One</span>
                     <span class="skill-tag px-3 py-1 rounded text-sm text-cyan-100">Cloud Service</span>
                     <span class="skill-tag px-3 py-1 rounded text-sm text-cyan-100">Backup System</span>
                     <span class="skill-tag px-3 py-1 rounded text-sm text-cyan-100">Access Control</span>
-                    <span class="skill-tag px-3 py-1 rounded text-sm text-cyan-100">Hardware & Software</span>
+                    <span class="skill-tag px-3 py-1 rounded text-sm text-cyan-100">Hardware &amp; Software</span>
+                    <span class="skill-tag px-3 py-1 rounded text-sm text-cyan-100">Quotation / BOQ</span>
                     <span class="skill-tag px-3 py-1 rounded text-sm text-cyan-100">Pre-Sales Support</span>
+                    <span class="skill-tag px-3 py-1 rounded text-sm text-cyan-100">AI Tools</span>
                 </div>
-            </section>
-        </div>
-
-        <!-- Experience Section -->
-        <section class="cyber-card p-6 rounded-lg box-glow">
-            <div class="flex items-center gap-3 mb-8 border-b border-cyber-blue/30 pb-3">
-                <i class="fa-solid fa-briefcase text-2xl text-cyber-cyan"></i>
-                <h2 class="text-2xl font-cyber font-bold text-white uppercase tracking-wider">Work <span class="text-cyber-cyan">Experience</span></h2>
-            </div>
-            
-            <div class="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-cyber-cyan before:to-cyber-blue">
-                
-                <!-- Experience 1 -->
-                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-cyber-cyan bg-cyber-dark text-cyber-cyan shadow-[0_0_10px_#00f3ff] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
-                        <i class="fa-solid fa-cloud"></i>
-                    </div>
-                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded cyber-card border-cyber-cyan/50 box-glow cursor-pointer hover:-translate-y-1 transition-transform duration-300" onclick="openModal('exp1')">
-                        <div class="flex items-center justify-between mb-1">
-                            <h3 class="font-bold text-cyber-cyan text-lg">IT Support Engineer</h3>
-                            <span class="text-xs font-cyber text-gray-400">Feb 2026 - Present</span>
-                        </div>
-                        <h4 class="text-white text-sm font-medium mb-3">Cloud Extreme Tech</h4>
-                        <div class="text-cyber-cyan/80 text-xs flex items-center gap-1 mt-2">
-                            <i class="fa-solid fa-arrow-pointer animate-pulse"></i> คลิกเพื่อดูรายละเอียดงาน
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Experience 2 -->
-                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
-                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-cyber-blue bg-cyber-dark text-cyber-blue shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
-                        <i class="fa-solid fa-building"></i>
-                    </div>
-                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded cyber-card border-cyber-blue/50 box-glow cursor-pointer hover:-translate-y-1 transition-transform duration-300" onclick="openModal('exp2')">
-                        <div class="flex items-center justify-between mb-1">
-                            <h3 class="font-bold text-cyber-blue text-lg">Facility System Development</h3>
-                            <span class="text-xs font-cyber text-gray-400">Jun 2024 - Jun 2025</span>
-                        </div>
-                        <h4 class="text-white text-sm font-medium mb-3">Archem.inc</h4>
-                        <div class="text-cyber-blue/80 text-xs flex items-center gap-1 mt-2">
-                            <i class="fa-solid fa-arrow-pointer animate-pulse"></i> คลิกเพื่อดูรายละเอียดงาน
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Experience 3 -->
-                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
-                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-500 bg-cyber-dark text-gray-400 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
-                        <i class="fa-solid fa-headset"></i>
-                    </div>
-                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded cyber-card border-gray-500/50 box-glow cursor-pointer hover:-translate-y-1 transition-transform duration-300" onclick="openModal('exp3')">
-                        <div class="flex items-center justify-between mb-1">
-                            <h3 class="font-bold text-gray-300 text-lg">IT Support</h3>
-                            <span class="text-xs font-cyber text-gray-500">Dec 2020 - Jun 2024</span>
-                        </div>
-                        <h4 class="text-gray-400 text-sm font-medium mb-3">CDT - Control Data (Thailand) Limited</h4>
-                        <div class="text-gray-400/80 text-xs flex items-center gap-1 mt-2">
-                            <i class="fa-solid fa-arrow-pointer animate-pulse"></i> คลิกเพื่อดูรายละเอียดงาน
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </section>
 
-        <!-- Education Section -->
-        <section class="cyber-card p-6 rounded-lg box-glow">
+        <!-- EXPERIENCE -->
+        <section id="experience" class="scroll-mt-24 cyber-card spot p-6 md:p-8 rounded-lg box-glow" data-reveal>
+            <div class="spot-fx"></div>
+            <div class="flex items-center gap-3 mb-10 border-b border-cyber-blue/30 pb-3">
+                <i class="fa-solid fa-briefcase text-2xl text-cyber-cyan"></i>
+                <h2 class="text-2xl font-cyber font-bold text-white uppercase tracking-wider">Work <span class="text-cyber-cyan">Experience</span></h2>
+            </div>
+            <div class="timeline space-y-10" id="timeline"></div>
+        </section>
+
+        <!-- EDUCATION -->
+        <section id="education" class="scroll-mt-24 cyber-card spot p-6 md:p-8 rounded-lg box-glow" data-reveal>
+            <div class="spot-fx"></div>
             <div class="flex items-center gap-3 mb-6 border-b border-cyber-blue/30 pb-3">
                 <i class="fa-solid fa-graduation-cap text-2xl text-cyber-cyan"></i>
                 <h2 class="text-2xl font-cyber font-bold text-white uppercase tracking-wider">Education <span class="text-cyber-cyan">Log</span></h2>
             </div>
-            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Data Block 1 -->
-                <div class="p-5 border-l-4 border-cyber-cyan bg-white/5 rounded-r">
-                    <div class="flex items-center justify-between mb-2">
+                <div class="p-5 border-l-4 border-cyber-cyan bg-white/5 rounded-r hover:bg-white/10 transition">
+                    <div class="flex items-center justify-between mb-2 gap-3">
                         <h3 class="text-xl font-bold text-cyber-cyan text-glow">ปวส. สาขาเทคโนโลยีสารสนเทศ</h3>
                         <span class="font-cyber text-sm bg-cyber-cyan/20 text-cyber-cyan px-2 py-1 rounded">2569</span>
                     </div>
                     <p class="text-white font-medium">วิทยาลัยเทคนิคนิคมอุตสาหกรรมระยอง</p>
                     <p class="text-sm text-gray-400 mt-2">เกรดเฉลี่ย: 3.37</p>
                 </div>
-                
-                <!-- Data Block 2 -->
-                <div class="p-5 border-l-4 border-cyber-blue bg-white/5 rounded-r">
-                    <div class="flex items-center justify-between mb-2">
+                <div class="p-5 border-l-4 border-cyber-blue bg-white/5 rounded-r hover:bg-white/10 transition">
+                    <div class="flex items-center justify-between mb-2 gap-3">
                         <h3 class="text-xl font-bold text-cyber-blue">มัธยมศึกษาตอนปลาย (ม.6)</h3>
                         <span class="font-cyber text-sm bg-cyber-blue/20 text-cyber-blue px-2 py-1 rounded">2567</span>
                     </div>
@@ -316,260 +412,484 @@
                 </div>
             </div>
         </section>
-        
-        <!-- Footer -->
-        <footer class="text-center mt-8 pb-8 text-gray-500 text-sm font-cyber flex flex-col items-center justify-center gap-2">
+
+        <!-- TERMINAL -->
+        <section id="termSection" class="scroll-mt-24 hidden">
+            <div class="flex items-center gap-3 mb-6">
+                <i class="fa-solid fa-terminal text-2xl text-cyber-cyan"></i>
+                <h2 class="text-2xl font-cyber font-bold text-white uppercase tracking-wider">Interactive <span class="text-cyber-cyan">Terminal</span></h2>
+                <div class="flex-1 h-px bg-gradient-to-r from-cyber-cyan/50 to-transparent"></div>
+            </div>
+            <div class="cyber-card rounded-lg box-glow overflow-hidden">
+                <div class="flex items-center gap-2 px-4 py-2 bg-black/60 border-b border-cyber-blue/30">
+                    <button id="termClose" class="w-3 h-3 rounded-full bg-red-500 hover:ring-2 ring-red-300" title="ปิด Terminal" aria-label="Close terminal"></button><span class="w-3 h-3 rounded-full bg-yellow-400"></span><span class="w-3 h-3 rounded-full bg-green-500"></span>
+                    <span class="ml-3 text-xs font-mono text-gray-400">guest@ratchanon-portfolio: ~</span>
+                </div>
+                <div id="termBody" class="font-mono text-sm p-4 h-72 overflow-y-auto text-gray-300 cursor-text" onclick="document.getElementById('termInput').focus()">
+                    <div id="termOut"></div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-green-400">guest@rr</span><span class="text-gray-500">:~$</span>
+                        <input id="termInput" class="flex-1 bg-transparent outline-none text-cyber-cyan caret-cyber-cyan font-mono" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Terminal input">
+                    </div>
+                </div>
+                <div class="px-4 py-2 border-t border-cyber-blue/30 flex flex-wrap gap-2 text-xs font-mono bg-black/40" id="termChips"></div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="scroll-mt-24 cyber-card spot p-6 md:p-8 rounded-lg box-glow" data-reveal>
+            <div class="spot-fx"></div>
+            <div class="flex items-center gap-3 mb-8 border-b border-cyber-blue/30 pb-3">
+                <i class="fa-solid fa-satellite-dish text-2xl text-cyber-cyan"></i>
+                <h2 class="text-2xl font-cyber font-bold text-white uppercase tracking-wider">Establish <span class="text-cyber-cyan">Connection</span></h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="space-y-4">
+                    <p class="text-gray-300">ผมยังเป็นผู้น้อยที่พร้อมเรียนรู้และพัฒนาตัวเองอยู่เสมอ หากท่านสนใจ ผมมีความตั้งใจและยินดีอย่างยิ่งที่จะได้ร่วมงานกับท่านและทีมงาน สามารถติดต่อผมได้ตามช่องทางด้านล่างครับ</p>
+                    <div class="flex items-center justify-between gap-3 bg-black/40 border border-cyber-blue/40 rounded px-4 py-3">
+                        <div class="flex items-center gap-3 min-w-0"><i class="fa-solid fa-envelope text-cyber-cyan"></i><span class="truncate font-mono text-sm">ratchanon93g@gmail.com</span></div>
+                        <button class="copy text-xs border border-cyber-cyan/50 text-cyber-cyan px-3 py-1 rounded hover:bg-cyber-cyan/10 transition shrink-0" data-copy="ratchanon93g@gmail.com"><i class="fa-regular fa-copy"></i> COPY</button>
+                    </div>
+                    <div class="flex items-center justify-between gap-3 bg-black/40 border border-cyber-blue/40 rounded px-4 py-3">
+                        <div class="flex items-center gap-3"><i class="fa-solid fa-phone text-cyber-cyan"></i><span class="font-mono text-sm">096-189-1670</span></div>
+                        <button class="copy text-xs border border-cyber-cyan/50 text-cyber-cyan px-3 py-1 rounded hover:bg-cyber-cyan/10 transition shrink-0" data-copy="096-189-1670"><i class="fa-regular fa-copy"></i> COPY</button>
+                    </div>
+                    <div class="flex items-center gap-3 bg-black/40 border border-cyber-blue/40 rounded px-4 py-3">
+                        <i class="fa-solid fa-location-dot text-cyber-cyan"></i><span class="font-mono text-sm">ระยอง, ประเทศไทย</span>
+                    </div>
+                </div>
+                <form id="contactForm" class="space-y-3 no-print">
+                    <input id="cfName" required placeholder="ชื่อของคุณ" class="w-full bg-black/40 border border-cyber-blue/40 rounded px-4 py-3 text-sm outline-none focus:border-cyber-cyan focus:shadow-[0_0_12px_rgb(var(--cyan)/.4)] transition">
+                    <textarea id="cfMsg" required rows="4" placeholder="ข้อความถึงผม..." class="w-full bg-black/40 border border-cyber-blue/40 rounded px-4 py-3 text-sm outline-none focus:border-cyber-cyan focus:shadow-[0_0_12px_rgb(var(--cyan)/.4)] transition resize-none"></textarea>
+                    <button class="w-full bg-cyber-cyan text-black font-bold py-3 rounded hover:shadow-[0_0_25px_rgb(var(--cyan)/.8)] transition"><i class="fa-solid fa-paper-plane mr-2"></i>ส่งข้อความผ่านอีเมล</button>
+                    <p class="text-xs text-gray-500">* ระบบจะเปิดแอปอีเมลของคุณพร้อมข้อความที่กรอกไว้</p>
+                </form>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="text-center pb-8 text-gray-500 text-sm font-cyber flex flex-col items-center gap-2">
             <div class="w-16 h-1 bg-cyber-blue rounded mb-2"></div>
-            <p>SYSTEM.PORTFOLIO // v1.0.26</p>
+            <p>SYSTEM.PORTFOLIO // v2.0.26</p>
             <p class="text-cyber-cyan">© 2026 RATCHANON RATTANAUBOL. ALL SYSTEMS ONLINE.</p>
+            <button id="termOpen" class="no-print mt-1 text-gray-700 hover:text-cyber-cyan font-mono text-xs transition" title="???" aria-label="Secret terminal">&gt;_</button>
         </footer>
+    </main>
 
-    </div>
+    <button id="topBtn" class="no-print fixed bottom-6 right-6 z-[80] w-11 h-11 rounded-full border border-cyber-cyan bg-cyber-dark/80 text-cyber-cyan opacity-0 pointer-events-none transition hover:bg-cyber-cyan hover:text-black hover:shadow-[0_0_20px_rgb(var(--cyan))]" aria-label="Back to top"><i class="fa-solid fa-chevron-up"></i></button>
+    <div id="toast" class="bg-cyber-dark border border-cyber-cyan text-cyber-cyan px-5 py-2 rounded font-mono text-sm shadow-[0_0_20px_rgb(var(--cyan)/.4)]"></div>
 
-    <!-- Modals Overlay -->
-    <div id="jobModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity duration-300 opacity-0" onclick="closeModalOnOutside(event)">
-        <div class="cyber-card w-full max-w-2xl max-h-[85vh] flex flex-col rounded-lg box-glow relative transform scale-95 transition-transform duration-300" id="modalContainer">
-            <!-- Modal Header -->
-            <div class="p-4 border-b border-cyber-blue/30 flex justify-between items-center sticky top-0 bg-cyber-dark/90 backdrop-blur-md z-10 rounded-t-lg">
+    <!-- Modal -->
+    <div id="jobModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" class="fixed inset-0 z-[110] hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity duration-300 opacity-0">
+        <div id="modalContainer" class="cyber-card w-full max-w-2xl max-h-[85vh] flex flex-col rounded-lg box-glow relative transform scale-95 transition-transform duration-300">
+            <div class="p-4 border-b border-cyber-blue/30 flex justify-between items-start gap-4 bg-cyber-dark/90 rounded-t-lg">
                 <div>
                     <h3 id="modalTitle" class="text-xl font-bold text-cyber-cyan">Job Title</h3>
-                    <h4 id="modalCompany" class="text-sm text-gray-400 mt-1">Company Name | Date</h4>
+                    <h4 id="modalCompany" class="text-sm text-gray-400 mt-1">Company</h4>
                 </div>
-                <button onclick="closeModal()" class="text-gray-400 hover:text-cyber-cyan transition-colors p-2 rounded-full hover:bg-white/5">
-                    <i class="fa-solid fa-xmark text-2xl"></i>
-                </button>
+                <button id="modalClose" class="text-gray-400 hover:text-cyber-cyan transition p-2 rounded-full hover:bg-white/5" aria-label="Close"><i class="fa-solid fa-xmark text-2xl"></i></button>
             </div>
-            <!-- Modal Body -->
             <div class="p-6 overflow-y-auto">
-                <ul id="modalContent" class="text-sm text-gray-300 space-y-3 list-disc list-inside">
-                    <!-- Dynamic content goes here -->
-                </ul>
+                <div id="modalTags" class="flex flex-wrap gap-2 mb-5"></div>
+                <ul id="modalContent" class="text-sm text-gray-300 space-y-3"></ul>
             </div>
         </div>
     </div>
 
-    <!-- Job Data Templates -->
-    <div class="hidden" id="jobData">
-        <div id="data-exp1">
-            <div class="title text-cyber-cyan">IT Support Engineer</div>
-            <div class="company">Cloud Extreme Tech | กุมภาพันธ์ 2569 - ปัจจุบัน</div>
-            <div class="details">
-                <li>ดูแลบำรุงรักษาอุปกรณ์ไอทีและระบบเครือข่ายภายในองค์กรให้พร้อมใช้งานอยู่เสมอ</li>
-                <li>ให้บริการ Helpdesk Support ทั้ง Onsite และ Remote แก้ไขปัญหา Hardware, Software และ Network</li>
-                <li>ติดตั้ง คอนฟิก และ troubleshoot อุปกรณ์เครือข่าย ได้แก่ Router, Switch และ Wireless Access Point</li>
-                <li>สนับสนุนและประสานงานด้าน Cloud Service, Backup System และระบบ Infrastructure เบื้องต้น</li>
-                <li>ออกแบบ วางแผน และให้คำปรึกษาด้านระบบเครือข่าย, CCTV, Wireless และ IT Infrastructure ให้เหมาะกับการใช้งานของลูกค้า</li>
-                <li>สำรวจหน้างาน (Site Survey) วิเคราะห์ความต้องการลูกค้า ออกแบบโซลูชันและวางแผนการติดตั้งระบบ</li>
-                <li>จัดเตรียม ติดตั้ง และส่งมอบอุปกรณ์คอมพิวเตอร์และอุปกรณ์ต่อพ่วงให้พร้อมใช้งานสำหรับลูกค้าและพนักงาน</li>
-                <li>จัดทำเอกสารการใช้งานระบบ, Network Diagram และรายงานปัญหาทางเทคนิคเพื่อสนับสนุนทีมงาน</li>
-                <li>ออกแบบ BOQ จัดทำใบเสนอราคา (Quotation) และคำนวณอุปกรณ์สำหรับโครงการ IT Infrastructure และ Network</li>
-                <li>ให้คำแนะนำด้านสินค้าและโซลูชันไอทีเช่น Network, CCTV, Server, Cloud และ Security เพื่อสนับสนุนงานขาย (Pre-Sales Support)</li>
-                <li>ประสานงาน Vendor และ Supplier ในการจัดหา ติดตั้ง แก้ไขปัญหาระบบ และติดตามความคืบหน้าโครงการ</li>
+<script>
+/* ============ Helpers ============ */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const finePointer = matchMedia('(pointer: fine)').matches;
+const esc = s => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let toastT;
+function toast(msg) {
+    const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+    clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+/* ============ DATA ============ */
+const JOBS = {
+    exp1: {
+        title: 'IT Support Engineer', company: 'Cloud Extreme Tech', date: 'กุมภาพันธ์ 2569 - ปัจจุบัน', short: 'Feb 2026 - Present',
+        icon: 'fa-cloud', color: 'cyan', current: true,
+        tags: ['Helpdesk', 'Network', 'CCTV', 'Cloud', 'Backup', 'BOQ', 'Pre-Sales'],
+        blurb: 'ดูแลระบบไอทีและเครือข่าย ให้คำปรึกษา ออกแบบโซลูชัน และจัดทำ BOQ / ใบเสนอราคา',
+        points: [
+            'ดูแลบำรุงรักษาอุปกรณ์ไอทีและระบบเครือข่ายภายในองค์กรให้พร้อมใช้งานอยู่เสมอ',
+            'ให้บริการ Helpdesk Support ทั้ง Onsite และ Remote แก้ไขปัญหา Hardware, Software และ Network',
+            'ติดตั้ง คอนฟิก และ troubleshoot อุปกรณ์เครือข่าย ได้แก่ Router, Switch และ Wireless Access Point',
+            'สนับสนุนและประสานงานด้าน Cloud Service, Backup System และระบบ Infrastructure เบื้องต้น',
+            'ออกแบบ วางแผน และให้คำปรึกษาด้านระบบเครือข่าย, CCTV, Wireless และ IT Infrastructure ให้เหมาะกับการใช้งานของลูกค้า',
+            'สำรวจหน้างาน (Site Survey) วิเคราะห์ความต้องการลูกค้า ออกแบบโซลูชันและวางแผนการติดตั้งระบบ',
+            'จัดเตรียม ติดตั้ง และส่งมอบอุปกรณ์คอมพิวเตอร์และอุปกรณ์ต่อพ่วงให้พร้อมใช้งานสำหรับลูกค้าและพนักงาน',
+            'จัดทำเอกสารการใช้งานระบบ, Network Diagram และรายงานปัญหาทางเทคนิคเพื่อสนับสนุนทีมงาน',
+            'ออกแบบ BOQ จัดทำใบเสนอราคา (Quotation) และคำนวณอุปกรณ์สำหรับโครงการ IT Infrastructure และ Network',
+            'ให้คำแนะนำด้านสินค้าและโซลูชันไอทีเช่น Network, CCTV, Server, Cloud และ Security เพื่อสนับสนุนงานขาย (Pre-Sales Support)',
+            'ประสานงาน Vendor และ Supplier ในการจัดหา ติดตั้ง แก้ไขปัญหาระบบ และติดตามความคืบหน้าโครงการ',
+        ]
+    },
+    exp2: {
+        title: 'Facility System Development', company: 'Archem.inc', date: 'มิถุนายน 2567 - มิถุนายน 2568 (1 ปี)', short: 'Jun 2024 - Jun 2025',
+        icon: 'fa-building', color: 'blue',
+        tags: ['SAP B1', 'Google Admin', 'Microsoft Admin', 'Access Control', 'CCTV', 'ISO 27001'],
+        blurb: 'IT Support, ดูแลผู้ใช้งาน ERP SAP B1, Access Control, CCTV และเอกสาร IT Audit',
+        points: [
+            'ให้บริการ IT Support และ Helpdesk แก่ผู้ใช้งาน ทั้ง Remote และ Onsite พร้อมติดตั้งอุปกรณ์คอมพิวเตอร์ เครื่องพิมพ์ และซอฟต์แวร์ให้พร้อมใช้งาน',
+            'รับแจ้ง ติดตาม และแก้ไขปัญหา Hardware, Software, Network และ Antivirus ผ่านโทรศัพท์ อีเมล และ Ticketing System',
+            'ดูแลจัดการ User Account และสิทธิ์การเข้าถึงระบบใน Google Admin, Microsoft Admin และ ERP (SAP Business One) ตามนโยบายบริษัท',
+            'วางแผนและดำเนินงาน Preventive Maintenance พร้อมอัปเดต OS, Software และ Security Patch เพื่อความเสถียรและปลอดภัยของระบบ',
+            'ตรวจสอบและจัดทำรายงานสถานะระบบ IT Infrastructure, Hardware และ Application ประจำวัน',
+            'ดูแลระบบเครือข่าย LAN/WLAN, Router, Switch, Access Point และการเชื่อมต่ออินเทอร์เน็ตให้พร้อมใช้งานต่อเนื่อง',
+            'ดูแลระบบ Access Control, Face Recognition, Keycard และระบบบันทึกเวลาทำงาน พร้อมจัดทำรายงานส่งฝ่าย HR',
+            'ตรวจสอบและบำรุงรักษาระบบ CCTV, NVR/DVR รวมถึงสำรองข้อมูลภาพย้อนหลังตามที่ได้รับมอบหมาย',
+            'ดูแลและทดสอบระบบ PA System และ Fire Alarm System ให้พร้อมตอบสนองต่อเหตุฉุกเฉิน',
+            'บริหารทะเบียนทรัพย์สินไอที (IT Asset Inventory) และจัดทำเอกสาร IT Audit, Software License, Warranty และ SLA เพื่อรองรับมาตรฐาน ISO 9001 / ISO 27001',
+            'ประสานงานกับ Vendor/Supplier และ Escalate ปัญหาระบบที่ซับซ้อนให้ผู้ดูแลระบบหรือหัวหน้างาน',
+        ]
+    },
+    exp3: {
+        title: 'IT Support', company: 'CDT - Control Data (Thailand) Limited, CDG Group', date: 'ธันวาคม 2563 - มิถุนายน 2567', short: 'Dec 2020 - Jun 2024',
+        icon: 'fa-headset', color: 'gray',
+        tags: ['Helpdesk', 'Onsite', 'SLA', 'Backup', 'Firewall', 'VPN', 'Windows/macOS'],
+        blurb: 'Helpdesk & Onsite Support ตาม SLA, Backup/Restore, Firewall/VPN และอบรมผู้ใช้งาน',
+        points: [
+            'ให้บริการ Helpdesk และ Onsite Support ออกหน่วยบริการนอกสถานที่เพื่อดูแลระบบ ณ จุดติดตั้งของลูกค้าตามที่ได้รับมอบหมาย',
+            'รับแจ้งปัญหาผ่านโทรศัพท์ อีเมล และระบบ Ticket พร้อมเร่งแก้ไขให้เป็นไปตามกำหนดเวลา (SLA)',
+            'จัดทำเอกสาร บันทึกประวัติการซ่อม จัดทำคู่มือการใช้งานระบบ และสรุปรายงานส่งหัวหน้างาน',
+            'แนะนำและอบรมวิธีใช้งานระบบและอุปกรณ์เบื้องต้นให้แก่ผู้ใช้งาน (End-user) เพื่อลดการเกิดปัญหาซ้ำ',
+            'ดูแลระบบเครือข่ายและข้อมูล ช่วยสำรอง (Backup) และกู้คืนข้อมูลเมื่อระบบมีปัญหา',
+            'ตั้งค่าและดูแลระบบความปลอดภัยพื้นฐาน เช่น Firewall และ VPN สำหรับการทำงานระยะไกล',
+            'ซ่อมแซมเบื้องต้น ตรวจเช็ค และแก้ไขปัญหาคอมพิวเตอร์ โน้ตบุ๊ก เครื่องพิมพ์ และอุปกรณ์ต่อพ่วง',
+            'จัดเตรียมเครื่อง ติดตั้งระบบปฏิบัติการ (Windows/macOS) และโปรแกรมพื้นฐานให้พร้อมใช้งาน',
+            'จัดทำทะเบียนทรัพย์สิน ตรวจนับ และควบคุมการเบิกจ่ายอุปกรณ์ไอทีภายในองค์กร',
+        ]
+    }
+};
+const COLORS = {
+    cyan: { text: 'text-cyber-cyan', border: 'border-cyber-cyan', glow: 'shadow-[0_0_12px_rgb(var(--cyan))]', chip: 'border-cyber-cyan/40 text-cyber-cyan' },
+    blue: { text: 'text-cyber-blue', border: 'border-cyber-blue', glow: '', chip: 'border-cyber-blue/50 text-blue-300' },
+    gray: { text: 'text-gray-300', border: 'border-gray-500', glow: '', chip: 'border-gray-500/50 text-gray-400' },
+};
+
+/* ============ Render dynamic sections ============ */
+$('#timeline').innerHTML = Object.entries(JOBS).map(([id, j]) => {
+    const c = COLORS[j.color];
+    return `
+    <div class="relative" data-reveal>
+        <div class="tl-dot border-2 ${c.border} ${c.text} ${c.glow}"><i class="fa-solid ${j.icon}"></i></div>
+        <button data-job="${id}" class="cyber-card spot text-left w-full p-5 rounded box-glow hover:-translate-y-1 transition-transform duration-300 border ${c.border}/50">
+            <div class="spot-fx"></div>
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+                <h3 class="font-bold ${c.text} text-lg">${j.title} ${j.current ? '<span class="ml-2 align-middle text-[10px] font-mono px-2 py-0.5 rounded-full bg-green-400/15 text-green-400 border border-green-400/40">CURRENT</span>' : ''}</h3>
+                <span class="text-xs font-cyber text-gray-400">${j.short}</span>
             </div>
-        </div>
-        <div id="data-exp2">
-            <div class="title text-cyber-blue">Facility System Development</div>
-            <div class="company">Archem.inc | มิถุนายน 2567 - มิถุนายน 2568 (1 ปี)</div>
-            <div class="details">
-                <li>ให้บริการ IT Support และ Helpdesk แก่ผู้ใช้งาน ทั้ง Remote และ Onsite พร้อมติดตั้งอุปกรณ์คอมพิวเตอร์ เครื่องพิมพ์ และซอฟต์แวร์ให้พร้อมใช้งาน</li>
-                <li>รับแจ้ง ติดตาม และแก้ไขปัญหา Hardware, Software, Network และ Antivirus ผ่านโทรศัพท์ อีเมล และ Ticketing System</li>
-                <li>ดูแลจัดการ User Account และสิทธิ์การเข้าถึงระบบใน Google Admin, Microsoft Admin และ ERP (SAP Business One) ตามนโยบายบริษัท</li>
-                <li>วางแผนและดำเนินงาน Preventive Maintenance พร้อมอัปเดต OS, Software และ Security Patch เพื่อความเสถียรและปลอดภัยของระบบ</li>
-                <li>ตรวจสอบและจัดทำรายงานสถานะระบบ IT Infrastructure, Hardware และ Application ประจำวัน</li>
-                <li>ดูแลระบบเครือข่าย LAN/WLAN, Router, Switch, Access Point และการเชื่อมต่ออินเทอร์เน็ตให้พร้อมใช้งานต่อเนื่อง</li>
-                <li>ดูแลระบบ Access Control, Face Recognition, Keycard และระบบบันทึกเวลาทำงาน พร้อมจัดทำรายงานส่งฝ่าย HR</li>
-                <li>ตรวจสอบและบำรุงรักษาระบบ CCTV, NVR/DVR รวมถึงสำรองข้อมูลภาพย้อนหลังตามที่ได้รับมอบหมาย</li>
-                <li>ดูแลและทดสอบระบบ PA System และ Fire Alarm System ให้พร้อมตอบสนองต่อเหตุฉุกเฉิน</li>
-                <li>บริหารทะเบียนทรัพย์สินไอที (IT Asset Inventory) และจัดทำเอกสาร IT Audit, Software License, Warranty และ SLA เพื่อรองรับมาตรฐาน ISO 9001 / ISO 27001</li>
-                <li>ประสานงานกับ Vendor/Supplier และ Escalate ปัญหาระบบที่ซับซ้อนให้ผู้ดูแลระบบหรือหัวหน้างาน</li>
-            </div>
-        </div>
-        <div id="data-exp3">
-            <div class="title text-gray-300">IT Support</div>
-            <div class="company">CDT - Control Data (Thailand) Limited, CDG Group | ธันวาคม 2563 - มิถุนายน 2567</div>
-            <div class="details">
-                <li>ให้บริการ Helpdesk และ Onsite Support ออกหน่วยบริการนอกสถานที่เพื่อดูแลระบบ ณ จุดติดตั้งของลูกค้าตามที่ได้รับมอบหมาย</li>
-                <li>รับแจ้งปัญหาผ่านโทรศัพท์ อีเมล และระบบ Ticket พร้อมเร่งแก้ไขให้เป็นไปตามกำหนดเวลา (SLA)</li>
-                <li>จัดทำเอกสาร บันทึกประวัติการซ่อม จัดทำคู่มือการใช้งานระบบ และสรุปรายงานส่งหัวหน้างาน</li>
-                <li>แนะนำและอบรมวิธีใช้งานระบบและอุปกรณ์เบื้องต้นให้แก่ผู้ใช้งาน (End-user) เพื่อลดการเกิดปัญหาซ้ำ</li>
-                <li>ดูแลระบบเครือข่ายและข้อมูล ช่วยสำรอง (Backup) และกู้คืนข้อมูลเมื่อระบบมีปัญหา</li>
-                <li>ตั้งค่าและดูแลระบบความปลอดภัยพื้นฐาน เช่น Firewall และ VPN สำหรับการทำงานระยะไกล</li>
-                <li>ซ่อมแซมเบื้องต้น ตรวจเช็ค และแก้ไขปัญหาคอมพิวเตอร์ โน้ตบุ๊ก เครื่องพิมพ์ และอุปกรณ์ต่อพ่วง</li>
-                <li>จัดเตรียมเครื่อง ติดตั้งระบบปฏิบัติการ (Windows/macOS) และโปรแกรมพื้นฐานให้พร้อมใช้งาน</li>
-                <li>จัดทำทะเบียนทรัพย์สิน ตรวจนับ และควบคุมการเบิกจ่ายอุปกรณ์ไอทีภายในองค์กร</li>
-            </div>
-        </div>
-    </div>
+            <h4 class="text-white text-sm font-medium mb-2">${j.company}</h4>
+            <p class="text-sm text-gray-400 mb-3">${j.blurb}</p>
+            <div class="flex flex-wrap gap-2 mb-3">${j.tags.map(t => `<span class="text-[11px] font-mono px-2 py-0.5 rounded border ${c.chip}">${t}</span>`).join('')}</div>
+            <div class="${c.text} opacity-80 text-xs flex items-center gap-1"><i class="fa-solid fa-arrow-pointer animate-pulse"></i> คลิกเพื่อดูรายละเอียดงาน</div>
+        </button>
+    </div>`;
+}).join('');
 
-    <!-- Modal Scripts -->
-    <script>
-        const modal = document.getElementById('jobModal');
-        const modalContainer = document.getElementById('modalContainer');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalCompany = document.getElementById('modalCompany');
-        const modalContent = document.getElementById('modalContent');
+/* Years of experience (since Dec 2020) */
+(() => {
+    const now = new Date(), start = new Date(2020, 11, 1);
+    const yrs = Math.max(1, Math.floor((now - start) / (365.25 * 24 * 3600 * 1000)));
+    const el = $('[data-years]'); el.dataset.to = yrs; el.textContent = '0';
+})();
 
-        function openModal(jobId) {
-            const dataElement = document.getElementById('data-' + jobId);
-            if (!dataElement) return;
+/* ============ Boot screen ============ */
+(function boot() {
+    const lines = [
+        '> initializing portfolio kernel ...',
+        '> loading modules: helpdesk, network, cctv, erp-sapb1 ... [OK]',
+        '> mounting ai-assistant ............................ [OK]',
+        '> establishing secure connection ................... [OK]',
+        '> welcome, guest. access granted.'
+    ];
+    const log = $('#bootLog'), bar = $('#bootBar'), el = $('#boot');
+    let done = false;
+    function finish() {
+        if (done) return; done = true;
+        bar.style.width = '100%';
+        el.classList.add('done'); document.body.classList.remove('booting');
+        setTimeout(() => el.remove(), 800);
+        startGlitch(); startTyping();
+    }
+    $('#bootSkip').onclick = finish; el.addEventListener('click', finish);
+    if (reduceMotion) return finish();
+    lines.forEach((l, i) => setTimeout(() => {
+        if (done) return;
+        const d = document.createElement('div'); d.textContent = l; log.appendChild(d);
+        bar.style.width = ((i + 1) / lines.length * 90) + '%';
+    }, 250 + i * 380));
+    setTimeout(finish, 250 + lines.length * 380 + 350);
+})();
 
-            // นำข้อมูลไปใส่ใน Modal
-            modalTitle.innerHTML = dataElement.querySelector('.title').innerHTML;
-            modalCompany.innerHTML = dataElement.querySelector('.company').innerHTML;
-            modalContent.innerHTML = dataElement.querySelector('.details').innerHTML;
-            
-            // ปรับสี Title ตามตำแหน่ง
-            modalTitle.className = dataElement.querySelector('.title').className + ' text-xl font-bold';
+/* ============ Typing roles ============ */
+let typingStarted = false;
+function startTyping() {
+    if (typingStarted) return; typingStarted = true;
+    const roles = ['IT SUPPORT ENGINEER', 'HELPDESK SPECIALIST', 'NETWORK & CCTV', 'ERP SAP B1 SUPPORT', 'PRE-SALES & QUOTATION', 'AI-POWERED TROUBLESHOOTER'];
+    const el = $('#typed'); let r = 0, c = 0, del = false;
+    if (reduceMotion) { el.textContent = roles[0]; return; }
+    (function tick() {
+        const w = roles[r];
+        el.textContent = w.slice(0, c);
+        if (!del && c === w.length) { del = true; return setTimeout(tick, 1600); }
+        if (del && c === 0) { del = false; r = (r + 1) % roles.length; }
+        c += del ? -1 : 1;
+        setTimeout(tick, del ? 35 : 75);
+    })();
+}
+function startGlitch() {
+    if (reduceMotion) return;
+    const g = [$('#glitchName'), $('#glitchName2')];
+    const run = () => { g.forEach(e => { e.classList.remove('go'); void e.offsetWidth; e.classList.add('go'); }); setTimeout(run, 3500 + Math.random() * 3500); };
+    run();
+}
 
-            // แสดง Modal
-            modal.classList.remove('hidden');
-            // ทำดีเลย์เล็กน้อยเพื่อให้ Animation ทำงาน
-            setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                modalContainer.classList.remove('scale-95');
-            }, 10);
-            
-            // ล็อกไม่ให้หน้าหลังเลื่อนขึ้นลงได้
-            document.body.style.overflow = 'hidden';
+/* ============ Reveal, counters, skill bars ============ */
+const io = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('in'); io.unobserve(e.target);
+    $$('.bar > i', e.target).forEach(b => b.style.width = b.dataset.w + '%');
+    $$('.count', e.target).forEach(countUp);
+}), { threshold: .15 });
+$$('[data-reveal]').forEach((el, i) => { el.style.transitionDelay = (i % 3) * 90 + 'ms'; io.observe(el); });
+
+function countUp(el) {
+    const to = +el.dataset.to, t0 = performance.now(), dur = 1400;
+    if (reduceMotion) return el.textContent = to;
+    (function f(t) {
+        const p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(to * e);
+        if (p < 1) requestAnimationFrame(f);
+    })(t0);
+}
+
+/* ============ Nav: scroll progress, spy, mobile menu, top btn ============ */
+const progress = $('#progress'), navbar = $('#navbar'), topBtn = $('#topBtn');
+function onScroll() {
+    const h = document.documentElement, max = h.scrollHeight - innerHeight, y = scrollY;
+    progress.style.width = (max > 0 ? y / max * 100 : 0) + '%';
+    navbar.classList.toggle('bg-cyber-dark/85', y > 30);
+    navbar.classList.toggle('backdrop-blur-md', y > 30);
+    navbar.classList.toggle('border-b', y > 30);
+    navbar.classList.toggle('border-cyber-blue/30', y > 30);
+    const show = y > 600;
+    topBtn.style.opacity = show ? 1 : 0; topBtn.style.pointerEvents = show ? 'auto' : 'none';
+}
+addEventListener('scroll', onScroll, { passive: true }); onScroll();
+topBtn.onclick = () => scrollTo({ top: 0, behavior: 'smooth' });
+
+const links = $$('.nav-link');
+const spy = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id));
+}), { rootMargin: '-45% 0px -50% 0px' });
+['about', 'experience', 'education', 'contact'].forEach(id => spy.observe($('#' + id)));
+
+$('#menuBtn').onclick = () => { const m = $('#mobileMenu'); m.classList.toggle('hidden'); m.classList.toggle('flex'); };
+$$('#mobileMenu a').forEach(a => a.onclick = () => { $('#mobileMenu').classList.add('hidden'); $('#mobileMenu').classList.remove('flex'); });
+
+/* ============ Theme + FX toggle ============ */
+let accent = '0, 243, 255';
+function setTheme(rgb) {
+    document.documentElement.style.setProperty('--cyan', rgb);
+    accent = rgb.split(' ').join(', ');
+    $$('#themeDots button').forEach(b => { b.classList.toggle('ring-white/70', b.dataset.theme === rgb); b.classList.toggle('ring-transparent', b.dataset.theme !== rgb); });
+}
+$$('#themeDots button').forEach(b => b.onclick = () => { setTheme(b.dataset.theme); toast('THEME: ' + b.title.toUpperCase()); });
+$('#fxBtn').onclick = () => { const off = document.body.classList.toggle('no-fx'); toast(off ? 'FX: OFF' : 'FX: ON'); };
+
+/* ============ Image fallback ============ */
+(() => {
+    const img = $('#avatar');
+    const chain = ['https://raw.githubusercontent.com/CDN001/CDN001.github.io/main/profilem.png'];
+    img.addEventListener('error', function () {
+        if (chain.length) { this.src = chain.shift(); return; }
+        this.classList.add('hidden'); const f = $('#avatarFallback'); f.classList.remove('hidden'); f.classList.add('flex');
+    });
+})();
+
+/* ============ Cursor glow, card spotlight, 3D tilt ============ */
+const glow = $('#glow');
+if (finePointer) {
+    let gx = 0, gy = 0, tx = 0, ty = 0;
+    addEventListener('pointermove', e => { tx = e.clientX; ty = e.clientY; glow.style.opacity = 1; }, { passive: true });
+    document.addEventListener('mouseleave', () => glow.style.opacity = 0);
+    (function follow() { gx += (tx - gx) * .12; gy += (ty - gy) * .12; glow.style.transform = `translate(${gx}px,${gy}px)`; requestAnimationFrame(follow); })();
+}
+document.addEventListener('pointermove', e => {
+    const s = e.target.closest && e.target.closest('.spot');
+    if (!s) return;
+    const r = s.getBoundingClientRect();
+    s.style.setProperty('--mx', (e.clientX - r.left) + 'px'); s.style.setProperty('--my', (e.clientY - r.top) + 'px');
+}, { passive: true });
+if (finePointer && !reduceMotion) {
+    document.addEventListener('pointermove', e => {
+        const t = e.target.closest && e.target.closest('.tilt'); if (!t) return;
+        const r = t.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+        t.style.transform = `perspective(800px) rotateX(${-y * 8}deg) rotateY(${x * 8}deg) translateZ(0)`;
+    }, { passive: true });
+    $$('.tilt').forEach(t => t.addEventListener('pointerleave', () => t.style.transform = ''));
+}
+
+/* ============ Modal ============ */
+const modal = $('#jobModal');
+let lastFocus = null;
+function openModal(id) {
+    const j = JOBS[id]; if (!j) return;
+    const c = COLORS[j.color];
+    $('#modalTitle').className = 'text-xl font-bold ' + c.text; $('#modalTitle').textContent = j.title;
+    $('#modalCompany').textContent = j.company + ' | ' + j.date;
+    $('#modalTags').innerHTML = j.tags.map(t => `<span class="text-[11px] font-mono px-2 py-0.5 rounded border ${c.chip}">${t}</span>`).join('');
+    $('#modalContent').innerHTML = j.points.map(p => `<li class="flex gap-3"><i class="fa-solid fa-angle-right ${c.text} mt-1 shrink-0"></i><span>${p}</span></li>`).join('');
+    lastFocus = document.activeElement;
+    modal.classList.remove('hidden'); modal.classList.add('flex');
+    requestAnimationFrame(() => { modal.classList.add('open'); $('#modalClose').focus(); });
+    document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+    modal.classList.remove('open');
+    setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); document.body.style.overflow = ''; lastFocus && lastFocus.focus(); }, 300);
+}
+document.addEventListener('click', e => { const b = e.target.closest('[data-job]'); if (b) openModal(b.dataset.job); });
+$('#modalClose').onclick = closeModal;
+modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+
+/* ============ Contact: copy + mailto form ============ */
+$$('.copy').forEach(b => b.onclick = async () => {
+    try { await navigator.clipboard.writeText(b.dataset.copy); toast('COPIED: ' + b.dataset.copy); }
+    catch { toast('คัดลอกไม่สำเร็จ'); }
+});
+$('#contactForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const n = $('#cfName').value.trim(), m = $('#cfMsg').value.trim();
+    location.href = `mailto:ratchanon93g@gmail.com?subject=${encodeURIComponent('ติดต่อจากพอร์ตโฟลิโอ - ' + n)}&body=${encodeURIComponent(m + '\n\n— ' + n)}`;
+});
+
+/* ============ Interactive terminal ============ */
+(function terminal() {
+    const out = $('#termOut'), input = $('#termInput'), body = $('#termBody');
+    const hist = []; let hi = 0;
+    const themes = { cyan: '0 243 255', green: '57 255 20', purple: '188 19 254', amber: '255 176 0' };
+    const print = (html) => { const d = document.createElement('div'); d.innerHTML = html; out.appendChild(d); body.scrollTop = body.scrollHeight; };
+    const cmds = {
+        help: () => `<span class="cy">คำสั่งที่ใช้ได้:</span><br>
+            &nbsp;<span class="ok">whoami</span> &nbsp;&nbsp;&nbsp;– แนะนำตัว<br>
+            &nbsp;<span class="ok">skills</span> &nbsp;&nbsp;&nbsp;– ทักษะหลัก<br>
+            &nbsp;<span class="ok">exp</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;– ประสบการณ์ทำงาน<br>
+            &nbsp;<span class="ok">edu</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;– การศึกษา<br>
+            &nbsp;<span class="ok">contact</span> &nbsp;&nbsp;– ช่องทางติดต่อ<br>
+            &nbsp;<span class="ok">ping</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;– ทดสอบเครือข่าย (ของจริงสไตล์ไอที)<br>
+            &nbsp;<span class="ok">theme &lt;cyan|green|purple|amber&gt;</span><br>
+            &nbsp;<span class="ok">goto &lt;about|experience|contact&gt;</span><br>
+            &nbsp;<span class="ok">sudo hire-me</span> &nbsp;– ลองดู 😉<br>
+            &nbsp;<span class="ok">clear</span> &nbsp;·&nbsp; <span class="ok">exit</span>`,
+        whoami: () => `Ratchanon Rattanaubol (รัชชานนท์ รัตนอุบล)<br><span class="dim">IT Support Engineer · Helpdesk Onsite/Remote · Network · CCTV · ERP SAP B1 · Pre-Sales · AI-powered</span>`,
+        skills: () => 'Helpdesk · Troubleshooting · Network (LAN/WLAN, Router/Switch/AP) · CCTV/NVR/DVR · Access Control · Firewall/VPN · Google Workspace · Microsoft Admin · SAP Business One Support · Cloud/Backup · Quotation/BOQ · AI Tools',
+        exp: () => Object.values(JOBS).map(j => `<span class="cy">${esc(j.short)}</span> &nbsp;${esc(j.title)} <span class="dim">@ ${esc(j.company)}</span>`).join('<br>'),
+        edu: () => `<span class="cy">2569</span> ปวส. เทคโนโลยีสารสนเทศ – วิทยาลัยเทคนิคนิคมอุตสาหกรรมระยอง (GPA 3.37)<br><span class="cy">2567</span> ม.6 – ศูนย์ส่งเสริมการเรียนรู้ อำเภอนิคมพัฒนา (GPA 3.24)`,
+        contact: () => `📧 ratchanon93g@gmail.com<br>📞 096-189-1670<br>📍 ระยอง, ประเทศไทย`,
+        ping: () => {
+            const l = ['Pinging ratchanon.local with 32 bytes of data:'];
+            for (let i = 0; i < 4; i++) l.push(`Reply from 10.0.0.1: bytes=32 time=${1 + Math.floor(Math.random() * 4)}ms TTL=64`);
+            l.push('<span class="ok">Packets: Sent = 4, Received = 4, Lost = 0 (0% loss)</span>');
+            return l.join('<br>');
+        },
+        clear: () => { out.innerHTML = ''; return null; },
+        exit: () => { setTimeout(() => window.toggleTerm(false), 300); return 'bye 👋'; },
+        sudo: (a) => a[0] === 'hire-me' ? `<span class="ok">[sudo] permission granted ✔</span><br>กำลังเปิดฟอร์มติดต่อ...` : `<span class="warn">sudo: ต้องระบุคำสั่ง</span>`,
+        theme: (a) => themes[a[0]] ? (setTheme(themes[a[0]]), `theme → <span class="cy">${esc(a[0])}</span>`) : `<span class="warn">ใช้: theme cyan | green | purple | amber</span>`,
+        goto: (a) => { const m = { about: 'about', experience: 'experience', exp: 'experience', contact: 'contact', education: 'education', edu: 'education' }[a[0]]; if (!m) return `<span class="warn">ใช้: goto about | experience | contact</span>`; document.getElementById(m).scrollIntoView({ behavior: 'smooth' }); return `navigating → #${m}`; },
+    };
+    function run(raw) {
+        const [cmd, ...args] = raw.trim().split(/\s+/); if (!cmd) return;
+        print(`<span class="text-green-400">guest@rr</span><span class="text-gray-500">:~$</span> ${esc(raw)}`);
+        const f = cmds[cmd.toLowerCase()];
+        if (!f) return print(`<span class="warn">command not found: ${esc(cmd)}</span> <span class="dim">(พิมพ์ help)</span>`);
+        const r = f(args.map(a => a.toLowerCase())); if (r) print(r);
+        if (cmd === 'sudo' && args[0] === 'hire-me') setTimeout(() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' }), 700);
+    }
+    input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { const v = input.value; if (v.trim()) { hist.push(v); hi = hist.length; } run(v); input.value = ''; }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); if (hi > 0) input.value = hist[--hi]; }
+        else if (e.key === 'ArrowDown') { e.preventDefault(); input.value = hi < hist.length - 1 ? hist[++hi] : (hi = hist.length, ''); }
+        else if (e.key === 'Tab') { e.preventDefault(); const m = Object.keys(cmds).find(k => k.startsWith(input.value.toLowerCase()) && input.value); if (m) input.value = m; }
+        e.stopPropagation();
+    });
+    $('#termChips').innerHTML = ['help', 'whoami', 'skills', 'exp', 'contact', 'ping'].map(c => `<button class="px-2 py-1 border border-cyber-cyan/40 text-cyber-cyan rounded hover:bg-cyber-cyan/10 transition" data-cmd="${c}">${c}</button>`).join('');
+    $('#termChips').addEventListener('click', e => { const b = e.target.closest('[data-cmd]'); if (b) run(b.dataset.cmd); });
+    const sec = $('#termSection');
+    window.toggleTerm = (open) => {
+        const show = open === undefined ? sec.classList.contains('hidden') : open;
+        if (show) {
+            sec.classList.remove('hidden');
+            if (!reduceMotion) sec.animate([{ opacity: 0, transform: 'translateY(20px) scale(.97)' }, { opacity: 1, transform: 'none' }], { duration: 400, easing: 'ease-out' });
+            setTimeout(() => { sec.scrollIntoView({ behavior: 'smooth', block: 'center' }); input.focus({ preventScroll: true }); }, 60);
+            toast('🔓 SECRET TERMINAL UNLOCKED');
+        } else sec.classList.add('hidden');
+    };
+    $('#termOpen').onclick = () => window.toggleTerm();
+    $('#termClose').onclick = () => window.toggleTerm(false);
+    document.addEventListener('keydown', e => { if (e.key === '`' && !/INPUT|TEXTAREA/.test(e.target.tagName)) window.toggleTerm(); });
+    print(`<span class="cy">Welcome to Ratchanon's terminal v2.0.26</span> <span class="dim">— พิมพ์ <b>help</b> เพื่อดูคำสั่ง</span>`);
+})();
+
+/* ============ Konami easter egg ============ */
+(() => {
+    const seq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a']; let p = 0;
+    document.addEventListener('keydown', e => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        p = (e.key.toLowerCase() === seq[p].toLowerCase()) ? p + 1 : 0;
+        if (p === seq.length) { p = 0; const on = document.body.classList.toggle('rainbow'); toast(on ? '🌈 CHEAT MODE: ON' : 'CHEAT MODE: OFF'); }
+    });
+})();
+
+/* ============ Network particle background (mouse-reactive) ============ */
+(function network() {
+    const cv = $('#net'), cx = cv.getContext('2d');
+    let W, H, P = [], mouse = { x: -9999, y: -9999 }, running = true;
+    function resize() {
+        const dpr = Math.min(devicePixelRatio || 1, 2);
+        W = innerWidth; H = innerHeight; cv.width = W * dpr; cv.height = H * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        const n = Math.max(35, Math.min(90, Math.round(W * H / 20000)));
+        while (P.length < n) P.push(spawn()); P.length = n;
+    }
+    const spawn = () => ({ x: Math.random() * (W || innerWidth), y: Math.random() * (H || innerHeight), vx: (Math.random() - .5) * .9, vy: (Math.random() - .5) * .9 });
+    addEventListener('resize', resize);
+    addEventListener('pointermove', e => { mouse.x = e.clientX; mouse.y = e.clientY; }, { passive: true });
+    document.addEventListener('mouseleave', () => { mouse.x = mouse.y = -9999; });
+    document.addEventListener('visibilitychange', () => { running = !document.hidden; if (running) loop(); });
+    resize();
+    const LINK = 150, MR = 170;
+    function loop() {
+        if (!running) return;
+        cx.clearRect(0, 0, W, H);
+        for (const p of P) {
+            const dx = p.x - mouse.x, dy = p.y - mouse.y, d = Math.hypot(dx, dy);
+            if (d < 110 && d > 0) { p.x += dx / d * 1.2; p.y += dy / d * 1.2; }
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0 || p.x > W) p.vx *= -1; if (p.y < 0 || p.y > H) p.vy *= -1;
+            cx.beginPath(); cx.arc(p.x, p.y, 2, 0, 6.2832); cx.fillStyle = `rgba(${accent}, .6)`; cx.fill();
         }
-
-        function closeModal() {
-            // เล่น Animation ปิด
-            modal.classList.add('opacity-0');
-            modalContainer.classList.add('scale-95');
-            
-            // ซ่อนกล่องหลังจากเล่น Animation เสร็จ
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                document.body.style.overflow = '';
-            }, 300);
-        }
-
-        function closeModalOnOutside(event) {
-            if (event.target === modal) {
-                closeModal();
+        cx.lineWidth = .6;
+        for (let i = 0; i < P.length; i++) {
+            for (let j = i + 1; j < P.length; j++) {
+                const d = Math.hypot(P[i].x - P[j].x, P[i].y - P[j].y);
+                if (d < LINK) { cx.strokeStyle = `rgba(0,102,255,${1 - d / LINK})`; cx.beginPath(); cx.moveTo(P[i].x, P[i].y); cx.lineTo(P[j].x, P[j].y); cx.stroke(); }
             }
+            const dm = Math.hypot(P[i].x - mouse.x, P[i].y - mouse.y);
+            if (dm < MR) { cx.strokeStyle = `rgba(${accent},${(1 - dm / MR) * .8})`; cx.beginPath(); cx.moveTo(P[i].x, P[i].y); cx.lineTo(mouse.x, mouse.y); cx.stroke(); }
         }
-
-        // กดปุ่ม ESC เพื่อปิด
-        document.addEventListener('keydown', function(event) {
-            if (event.key === "Escape" && !modal.classList.contains('hidden')) {
-                closeModal();
-            }
-        });
-    </script>
-
-    <!-- Scripts for Canvas Network Effect -->
-    <script>
-        const canvas = document.getElementById('network-canvas');
-        const ctx = canvas.getContext('2d');
-        
-        let width = canvas.width = window.innerWidth;
-        let height = canvas.height = window.innerHeight;
-        
-        const particles = [];
-        const properties = {
-            bgColor: 'rgba(5, 10, 21, 1)',
-            particleColor: 'rgba(0, 243, 255, 0.5)',
-            particleRadius: 2,
-            particleCount: 60,
-            particleMaxVelocity: 0.5,
-            lineLength: 150,
-            particleLife: 6
-        };
-
-        window.onresize = function(){
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        }
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.velocityX = Math.random() * (properties.particleMaxVelocity * 2) - properties.particleMaxVelocity;
-                this.velocityY = Math.random() * (properties.particleMaxVelocity * 2) - properties.particleMaxVelocity;
-                this.life = Math.random() * properties.particleLife * 60;
-            }
-            
-            position() {
-                this.x + this.velocityX > width && this.velocityX > 0 || this.x + this.velocityX < 0 && this.velocityX < 0 ? this.velocityX *= -1 : this.velocityX;
-                this.y + this.velocityY > height && this.velocityY > 0 || this.y + this.velocityY < 0 && this.velocityY < 0 ? this.velocityY *= -1 : this.velocityY;
-                this.x += this.velocityX;
-                this.y += this.velocityY;
-            }
-            
-            reDraw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, properties.particleRadius, 0, Math.PI * 2);
-                ctx.closePath();
-                ctx.fillStyle = properties.particleColor;
-                ctx.fill();
-            }
-            
-            reCalculateLife() {
-                if(this.life < 1){
-                    this.x = Math.random() * width;
-                    this.y = Math.random() * height;
-                    this.velocityX = Math.random() * (properties.particleMaxVelocity * 2) - properties.particleMaxVelocity;
-                    this.velocityY = Math.random() * (properties.particleMaxVelocity * 2) - properties.particleMaxVelocity;
-                    this.life = Math.random() * properties.particleLife * 60;
-                }
-                this.life--;
-            }
-        }
-
-        function reDrawBackground() {
-            ctx.fillStyle = properties.bgColor;
-            ctx.fillRect(0, 0, width, height);
-        }
-
-        function drawLines() {
-            let x1, y1, x2, y2, length, opacity;
-            for(let i in particles){
-                for(let j in particles){
-                    x1 = particles[i].x;
-                    y1 = particles[i].y;
-                    x2 = particles[j].x;
-                    y2 = particles[j].y;
-                    length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-                    if(length < properties.lineLength){
-                        opacity = 1 - length / properties.lineLength;
-                        ctx.lineWidth = '0.5';
-                        ctx.strokeStyle = 'rgba(0, 102, 255, '+opacity+')';
-                        ctx.beginPath();
-                        ctx.moveTo(x1, y1);
-                        ctx.lineTo(x2, y2);
-                        ctx.closePath();
-                        ctx.stroke();
-                    }
-                }
-            }
-        }
-
-        function reDrawParticles() {
-            for(let i in particles){
-                particles[i].reCalculateLife();
-                particles[i].position();
-                particles[i].reDraw();
-            }
-        }
-
-        function loop() {
-            ctx.clearRect(0,0, width, height);
-            reDrawParticles();
-            drawLines();
-            requestAnimationFrame(loop);
-        }
-
-        function init() {
-            for(let i = 0 ; i < properties.particleCount ; i++){
-                particles.push(new Particle);
-            }
-            loop();
-        }
-
-        init();
-    </script>
+        requestAnimationFrame(loop);
+    }
+    loop();
+})();
+</script>
 </body>
 </html>
